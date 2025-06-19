@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots } from "react-icons/fa";
+import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots, FaGift } from "react-icons/fa";
+import { addEmail } from "./actions";
+import { toast } from "sonner";
+import NewsletterDialog from "./components/NewsletterDialog";
 
 interface PackageType {
   id: number;
@@ -21,6 +24,8 @@ export default function Home() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsPackage, setDetailsPackage] = useState<PackageType | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
   const packages: PackageType[] = [
     {
       id: 1,
@@ -75,6 +80,31 @@ export default function Home() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const email = formData.get('email') as string;
+      const honeypot = formData.get('website') as string; // Honeypot field
+      const source = formData.get('source') as string;
+ 
+      const res = await addEmail(email, honeypot, source);
+      if (res.success) {
+        toast.success("Successfully subscribed to our newsletter!");
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+      } else {
+        toast.error(res.error || "Error adding email");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Sticky bar logic
   useEffect(() => {
     const onScroll = () => {
@@ -83,6 +113,37 @@ export default function Home() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Newsletter dialog logic
+  useEffect(() => {
+    // Check if user has already seen the dialog today
+    const lastShown = localStorage.getItem('newsletterDialogLastShown');
+    const today = new Date().toDateString();
+    
+    if (lastShown !== today) {
+      // Show dialog after 30 seconds or when user scrolls 50% down the page
+      const timer = setTimeout(() => {
+        setShowNewsletterDialog(true);
+        localStorage.setItem('newsletterDialogLastShown', today);
+      }, 30000); // 30 seconds
+
+      const handleScroll = () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent > 50 && !showNewsletterDialog) {
+          setShowNewsletterDialog(true);
+          localStorage.setItem('newsletterDialogLastShown', today);
+          clearTimeout(timer);
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [showNewsletterDialog]);
 
   // Social proof popup logic
  
@@ -118,7 +179,7 @@ export default function Home() {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 lg:hidden">
              
               <button 
                 className="lg:hidden p-2 text-gray-600 hover:text-[#8B4513] hover:bg-gray-50 rounded-lg transition-colors" 
@@ -190,6 +251,13 @@ export default function Home() {
                 onClick={() => scrollToSection('why')}
               >
                 Learn More
+              </button>
+              <button 
+                className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 rounded-lg font-semibold text-lg shadow-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 flex items-center gap-2"
+                onClick={() => setShowNewsletterDialog(true)}
+              >
+                <FaGift className="w-5 h-5" />
+                Get Discount
               </button>
             </div>
             <div className="flex flex-wrap items-center gap-4">
@@ -536,58 +604,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Blog/Advice Section Preview
-      <section id="blog" className="w-full bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Hair Growth Tips & Advice</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Expert insights and proven strategies to maximize your hair growth journey.
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
-              <h3 className="font-bold text-xl text-gray-900 mb-4">5 Proven Ways to Boost Hair Growth</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Discover science-backed strategies to maximize your results with Kerelys Minoxidil and complementary hair care practices.
-              </p>
-              <a href="#" className="inline-flex items-center gap-2 text-[#8B4513] font-semibold hover:text-[#A0522D] transition-colors">
-                Read More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
-              <h3 className="font-bold text-xl text-gray-900 mb-4">How to Use Minoxidil for Best Results</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Step-by-step guide to applying minoxidil correctly and tracking your progress for optimal results.
-              </p>
-              <a href="#" className="inline-flex items-center gap-2 text-[#8B4513] font-semibold hover:text-[#A0522D] transition-colors">
-                Read More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
-              <h3 className="font-bold text-xl text-gray-900 mb-4">Customer Success Stories</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Real stories from people who transformed their hair and confidence with Kerelys Minoxidil.
-              </p>
-              <a href="#" className="inline-flex items-center gap-2 text-[#8B4513] font-semibold hover:text-[#A0522D] transition-colors">
-                Read More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section> */}
+      {/* Newsletter Dialog */}
+      <NewsletterDialog 
+        isOpen={showNewsletterDialog} 
+        onClose={() => setShowNewsletterDialog(false)} 
+      />
 
       {/* Footer */}
       <footer id="contact" className="w-full bg-gray-900 text-white py-16">
@@ -629,19 +650,49 @@ export default function Home() {
               <p className="text-gray-400 mb-4 text-sm">
                 Stay updated with the latest hair care tips and exclusive offers.
               </p>
-              <form className="flex gap-2">
+              <form className="space-y-3" onSubmit={handleSubmit}>
+                {/* Hidden honeypot field */}
                 <input 
-                  type="email" 
-                  placeholder="Your email" 
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#8B4513]" 
-                  required 
+                  type="text" 
+                  name="website" 
+                  className="absolute left-[-9999px] opacity-0 pointer-events-none"
+                  tabIndex={-1}
+                  autoComplete="off"
                 />
-                <button 
-                  type="submit" 
-                  className="bg-[#8B4513] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors"
-                >
-                  Join
-                </button>
+                <input 
+                  type="hidden" 
+                  name="source" 
+                  value="footer"
+                />
+                
+                <div className="flex gap-2">
+                  <input 
+                    type="email" 
+                    placeholder="Your email address" 
+                    className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#8B4513] focus:ring-1 focus:ring-[#8B4513]" 
+                    required 
+                    name="email"
+                    disabled={isSubmitting}
+                  />
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="bg-[#8B4513] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Joining...
+                      </>
+                    ) : (
+                      'Join'
+                    )}
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-500">
+                  We respect your privacy. Unsubscribe at any time.
+                </p>
               </form>
             </div>
           </div>
@@ -720,25 +771,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Sticky Add to Cart Bar (mobile)
-      {showStickyBar && selectedPackage && (
-        <div className="fixed bottom-0 left-0 w-full z-40 bg-white border-t shadow-lg flex items-center justify-between px-4 py-3 lg:hidden">
-          <div className="flex items-center gap-3">
-            <Image src="/product.png" alt="Kerelys Minoxidil" width={40} height={60} className="object-contain" />
-            <div>
-              <div className="font-bold text-[#8B4513] text-sm">{selectedPackage.name}</div>
-              <div className="text-[#8B4513] font-bold text-lg">${selectedPackage.price.toFixed(2)}</div>
-            </div>
-          </div>
-          <button 
-            className="bg-[#8B4513] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors" 
-            onClick={() => {}}
-          >
-            Buy Now
-          </button>
-        </div>
-      )} */}
-
+  
       
     </main>
   );
