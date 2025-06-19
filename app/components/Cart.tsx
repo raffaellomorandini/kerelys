@@ -1,36 +1,35 @@
 "use client"
 
 import { useState } from 'react';
-import { FaTimes, FaShoppingCart, FaTrash, FaMinus, FaPlus, FaLock } from 'react-icons/fa';
+import { FaTimes, FaShoppingCart, FaTrash, FaMinus, FaPlus, FaLock, FaCreditCard } from 'react-icons/fa';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import PreCheckout from './PreCheckout';
 
 export default function Cart() {
   const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalItems, getTotalPrice } = useCart();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const router = useRouter();
+  const [showPreCheckout, setShowPreCheckout] = useState(false);
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (state.items.length === 0) {
       toast.error('Your cart is empty');
       return;
     }
 
-    setIsCheckingOut(true);
-    
-    try {
-      // Here you would integrate with your payment processor (Stripe, etc.)
-      // For now, we'll simulate a checkout process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast.success('Order placed successfully!');
-      clearCart();
-      closeCart();
-    } catch (error) {
-      toast.error('Checkout failed. Please try again.');
-    } finally {
-      setIsCheckingOut(false);
+    closeCart();
+    router.push('/checkout');
+  };
+
+  const handleViewPaymentOptions = () => {
+    if (state.items.length === 0) {
+      toast.error('Your cart is empty');
+      return;
     }
+
+    setShowPreCheckout(true);
   };
 
   const formatPrice = (price: number) => {
@@ -147,20 +146,18 @@ export default function Cart() {
               <div className="space-y-3">
                 <button
                   onClick={handleCheckout}
-                  disabled={isCheckingOut}
-                  className="w-full bg-[#8B4513] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full bg-[#8B4513] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors flex items-center justify-center gap-2"
                 >
-                  {isCheckingOut ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <FaLock className="text-sm" />
-                      Checkout
-                    </>
-                  )}
+                  <FaLock className="text-sm" />
+                  Checkout
+                </button>
+                
+                <button
+                  onClick={handleViewPaymentOptions}
+                  className="w-full border border-[#8B4513] text-[#8B4513] py-2 px-4 rounded-lg font-semibold hover:bg-[#8B4513] hover:text-white transition-colors flex items-center justify-center gap-2"
+                >
+                  <FaCreditCard className="text-sm" />
+                  View Payment Options
                 </button>
                 
                 <button
@@ -179,6 +176,11 @@ export default function Cart() {
           )}
         </div>
       </div>
+
+      {/* PreCheckout Modal */}
+      {showPreCheckout && (
+        <PreCheckout onClose={() => setShowPreCheckout(false)} />
+      )}
     </>
   );
 } 
