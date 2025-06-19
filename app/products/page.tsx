@@ -227,7 +227,7 @@ export default function ProductsPage() {
                   ))}
                 </ul>
                 
-                <details className="mb-6">
+                {/* <details className="mb-6">
                   <summary className="text-[#8B4513] font-semibold cursor-pointer hover:text-[#A0522D] transition-colors">
                     What's included?
                   </summary>
@@ -237,7 +237,7 @@ export default function ProductsPage() {
                     <li>• Progress tracking guide</li>
                     <li>• Access to support team</li>
                   </ul>
-                </details>
+                </details> */}
                 
                 <div className="text-xs text-green-700 mb-4 flex items-center gap-2 justify-center">
                   <FaShippingFast className="text-green-600" />
