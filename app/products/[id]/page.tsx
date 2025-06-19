@@ -173,7 +173,7 @@ const packages: PackageType[] = [
   }
 ];
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
@@ -181,8 +181,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const { addItem } = useCart();
+  const id = (await params).id;
 
-  const product = packages.find(pkg => pkg.id === parseInt(params.id));
+  const product = packages.find(pkg => pkg.id === parseInt(id));
 
   useEffect(() => {
     if (product) {

@@ -46,15 +46,15 @@ export default function Cart() {
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
         onClick={closeCart}
       />
       
       {/* Cart Sidebar */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out">
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full bg-white">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
             <div className="flex items-center gap-3">
               <FaShoppingCart className="text-[#8B4513] text-xl" />
               <h2 className="text-xl font-bold text-gray-900">Shopping Cart</h2>
@@ -73,7 +73,7 @@ export default function Cart() {
           </div>
 
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6 bg-white">
             {state.items.length === 0 ? (
               <div className="text-center py-12">
                 <FaShoppingCart className="text-gray-300 text-4xl mx-auto mb-4" />
@@ -136,7 +136,7 @@ export default function Cart() {
 
           {/* Footer */}
           {state.items.length > 0 && (
-            <div className="border-t border-gray-200 p-6">
+            <div className="border-t border-gray-200 p-6 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-lg font-semibold text-gray-900">Total</span>
                 <span className="text-2xl font-bold text-[#8B4513]">
