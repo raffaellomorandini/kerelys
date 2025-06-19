@@ -5,14 +5,12 @@ import { FaTag, FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';
 import { toast } from 'sonner';
 
 interface DiscountCodeProps {
-  subtotal: number;
   onDiscountApplied: (discount: any) => void;
   onDiscountRemoved: () => void;
   appliedDiscount?: any;
 }
 
 export default function DiscountCode({ 
-  subtotal, 
   onDiscountApplied, 
   onDiscountRemoved, 
   appliedDiscount 
@@ -23,7 +21,7 @@ export default function DiscountCode({
 
   const handleApplyCode = async () => {
     if (!code.trim()) {
-      toast.error('Please enter a discount code');
+      toast.error('Please enter a promotion code');
       return;
     }
 
@@ -37,24 +35,23 @@ export default function DiscountCode({
         },
         body: JSON.stringify({
           code: code.trim(),
-          subtotal,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.error || 'Failed to apply discount code');
+        toast.error(data.error || 'Failed to apply promotion code');
         return;
       }
 
       onDiscountApplied(data.discount);
-      toast.success(`Discount applied! You saved $${data.discount.savings.toFixed(2)}`);
+      toast.success(`Promotion applied! ${data.discount.name}`);
       setCode('');
       setIsExpanded(false);
     } catch (error) {
-      console.error('Error applying discount code:', error);
-      toast.error('Failed to apply discount code');
+      console.error('Error applying promotion code:', error);
+      toast.error('Failed to apply promotion code');
     } finally {
       setIsLoading(false);
     }
@@ -62,21 +59,14 @@ export default function DiscountCode({
 
   const handleRemoveDiscount = () => {
     onDiscountRemoved();
-    toast.success('Discount removed');
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+    toast.success('Promotion removed');
   };
 
   const getDiscountText = (discount: any) => {
     if (discount.type === 'percentage') {
       return `${discount.value}% off`;
     } else {
-      return `$${discount.value} off`;
+      return `$${(discount.value / 100).toFixed(2)} off`;
     }
   };
 
@@ -94,14 +84,14 @@ export default function DiscountCode({
                 {appliedDiscount.code} - {getDiscountText(appliedDiscount)}
               </p>
               <p className="text-sm text-green-600">
-                You saved {formatPrice(appliedDiscount.savings)}
+                {appliedDiscount.name}
               </p>
             </div>
           </div>
           <button
             onClick={handleRemoveDiscount}
             className="text-red-500 hover:text-red-700 p-1 rounded transition-colors"
-            title="Remove discount"
+            title="Remove promotion"
           >
             <FaTimes className="text-sm" />
           </button>
@@ -111,7 +101,7 @@ export default function DiscountCode({
         <div>
           <div className="flex items-center gap-2 mb-3">
             <FaTag className="text-[#8B4513] text-sm" />
-            <span className="font-semibold text-gray-900">Have a discount code?</span>
+            <span className="font-semibold text-gray-900">Have a promotion code?</span>
           </div>
           
           {!isExpanded ? (
@@ -119,7 +109,7 @@ export default function DiscountCode({
               onClick={() => setIsExpanded(true)}
               className="w-full text-left text-[#8B4513] hover:text-[#A0522D] font-medium transition-colors"
             >
-              + Add discount code
+              + Add promotion code
             </button>
           ) : (
             <div className="space-y-3">
@@ -154,9 +144,9 @@ export default function DiscountCode({
                   Cancel
                 </button>
                 
-                {/* Sample codes hint */}
+                {/* Note about Stripe handling */}
                 <div className="text-xs text-gray-500">
-                  Try: WELCOME10, SAVE20, FREESHIP
+                  Stripe will calculate your discount
                 </div>
               </div>
             </div>

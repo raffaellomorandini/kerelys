@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createPaymentIntent } from '@/app/lib/stripe';
+import { createPaymentIntentWithPromotion } from '@/app/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    const { amount, currency = 'usd', discount } = await request.json();
+    const { amount, currency = 'usd', promotionCode } = await request.json();
 
     if (!amount || amount <= 0) {
       return NextResponse.json(
@@ -12,18 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const paymentIntent = await createPaymentIntent(amount, currency);
-
-    // Add discount information to metadata if provided
-    if (discount) {
-      paymentIntent.metadata = {
-        ...paymentIntent.metadata,
-        discount_code: discount.code,
-        discount_type: discount.type,
-        discount_value: discount.value.toString(),
-        discount_amount: discount.savings.toString(),
-      };
-    }
+    const paymentIntent = await createPaymentIntentWithPromotion(amount, currency, promotionCode);
 
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,

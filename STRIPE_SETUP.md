@@ -40,7 +40,7 @@ NEXTAUTH_URL=http://localhost:3000
 - **Features**:
   - Stripe Elements integration
   - Custom styling matching your brand
-  - Order summary sidebar with discount codes
+  - Order summary sidebar with promotion codes
   - Responsive design
 
 ### 2. Payment Method Selection
@@ -55,24 +55,24 @@ NEXTAUTH_URL=http://localhost:3000
 - **Location**: `/app/components/PreCheckout.tsx`
 - **Features**:
   - Payment method preview
-  - Order summary with discount codes
+  - Order summary with promotion codes
   - Security badges
   - Benefits display
 
-### 4. Discount Codes System
+### 4. Stripe Native Promotion Codes
 - **Location**: `/app/components/DiscountCode.tsx`
 - **Features**:
-  - Real-time discount code validation
+  - Real-time promotion code validation using Stripe's API
   - Percentage and fixed amount discounts
-  - Minimum order requirements
-  - Usage limits and expiration dates
-  - Visual feedback and savings display
+  - Minimum order requirements (handled by Stripe)
+  - Usage limits and expiration dates (managed by Stripe)
+  - Visual feedback and promotion display
 
 ### 5. API Routes
 - **Payment Intent Creation**: `/app/api/create-payment-intent/route.ts`
-- **Discount Validation**: `/app/api/validate-discount/route.ts`
+- **Promotion Code Validation**: `/app/api/validate-discount/route.ts`
+- **Sample Promotions Creation**: `/app/api/admin/create-sample-promotions/route.ts`
 - **Stripe Configuration**: `/app/lib/stripe.ts`
-- **Discount Logic**: `/app/lib/discounts.ts`
 
 ### 6. Success Page
 - **Location**: `/app/payment-success/page.tsx`
@@ -84,29 +84,34 @@ NEXTAUTH_URL=http://localhost:3000
 ### 7. Admin Management
 - **Location**: `/app/components/DiscountCodesManager.tsx`
 - **Features**:
-  - View all discount codes
+  - View all promotion codes
   - Usage statistics and limits
   - Status tracking (Active, Expired, Used Up)
   - Code management interface
 
-## Discount Codes
+## Setting Up Promotion Codes
 
-### Sample Codes for Testing
-The system includes several sample discount codes for testing:
+### Option 1: Create Sample Codes (Recommended for Testing)
 
-- **WELCOME10**: 10% off, minimum $50 order, max $25 discount
-- **SAVE20**: 20% off, minimum $100 order, max $50 discount  
+1. **Start your development server**: `pnpm dev`
+2. **Create sample promotion codes**: Make a POST request to `/api/admin/create-sample-promotions`
+3. **Test the codes** in your checkout
+
+### Option 2: Create Codes Manually in Stripe Dashboard
+
+1. Go to your [Stripe Dashboard](https://dashboard.stripe.com/coupons)
+2. Create coupons with your desired settings
+3. Create promotion codes linked to those coupons
+4. Use the promotion codes in your checkout
+
+### Sample Promotion Codes
+
+After running the sample creation API, you'll have these codes:
+
+- **WELCOME10**: 10% off, minimum $50 order
+- **SAVE20**: 20% off, minimum $100 order  
 - **FREESHIP**: $10 off, minimum $75 order
-- **FLASH25**: 25% off, minimum $25 order, max $100 discount (fully used)
-
-### Discount Code Features
-- **Real-time Validation**: Codes are validated instantly as users type
-- **Multiple Types**: Percentage-based and fixed amount discounts
-- **Usage Limits**: Set maximum usage per code
-- **Minimum Orders**: Require minimum purchase amounts
-- **Expiration Dates**: Automatic expiration handling
-- **Visual Feedback**: Clear success/error messages
-- **Savings Display**: Shows exact amount saved
+- **FLASH25**: 25% off, minimum $25 order
 
 ## Testing the Integration
 
@@ -124,11 +129,32 @@ Use these test card numbers in Stripe test mode:
 3. **3D Secure**: Use `4000002500003155`
 4. **Insufficient Funds**: Use `4000000000009995`
 
-### Discount Code Testing
+### Promotion Code Testing
 1. **Valid Code**: Try `WELCOME10` with orders over $50
 2. **Invalid Code**: Try any random code
-3. **Expired Code**: Try `FLASH25` (fully used)
-4. **Minimum Order**: Try `SAVE20` with orders under $100
+3. **Minimum Order**: Try `SAVE20` with orders under $100
+4. **Usage Limits**: Try codes multiple times to test limits
+
+## Advantages of Stripe Native Promotion Codes
+
+### ✅ **Built-in Features**
+- **Automatic Validation**: Stripe handles all validation logic
+- **Usage Tracking**: Automatic redemption counting
+- **Expiration Management**: Built-in expiration handling
+- **Minimum Order Requirements**: Native support for order minimums
+- **Analytics**: Built-in reporting and analytics
+
+### ✅ **Security & Reliability**
+- **Fraud Protection**: Stripe's built-in fraud detection
+- **Rate Limiting**: Automatic protection against abuse
+- **Audit Trail**: Complete history of all redemptions
+- **PCI Compliance**: All data handled by Stripe
+
+### ✅ **Easy Management**
+- **Dashboard Management**: Create and manage codes in Stripe Dashboard
+- **API Integration**: Full programmatic access
+- **Bulk Operations**: Create multiple codes at once
+- **Real-time Updates**: Changes reflect immediately
 
 ## Security Features
 
@@ -136,7 +162,7 @@ Use these test card numbers in Stripe test mode:
 - **SSL Encryption**: 256-bit encryption for all transactions
 - **Tokenization**: Card data is never stored on your servers
 - **Fraud Protection**: Stripe's built-in fraud detection
-- **Discount Validation**: Server-side validation prevents abuse
+- **Promotion Code Security**: Server-side validation prevents abuse
 
 ## Customization
 
@@ -154,13 +180,13 @@ To add or remove payment methods:
 2. Update the `paymentMethodOrder` in the Stripe Elements configuration
 3. Modify the payment intent creation to include/exclude specific methods
 
-### Discount Codes
-To customize discount codes:
+### Promotion Codes
+To customize promotion codes:
 
-1. Edit the `sampleDiscountCodes` array in `/app/lib/discounts.ts`
-2. Add new validation rules in the `validateDiscountCode` function
-3. Modify the discount calculation logic in `calculateDiscount`
-4. Update the admin interface in `DiscountCodesManager.tsx`
+1. **Via Stripe Dashboard**: Create coupons and promotion codes directly
+2. **Via API**: Use the Stripe API to create codes programmatically
+3. **Via Admin Interface**: Use the provided admin components
+4. **Custom Validation**: Add additional validation logic in `/app/lib/stripe.ts`
 
 ## Production Deployment
 
@@ -170,8 +196,8 @@ Before going live:
 2. **Webhook Setup**: Configure webhooks for payment events
 3. **Domain Verification**: Add your domain to Stripe's allowed list
 4. **SSL Certificate**: Ensure your site has a valid SSL certificate
-5. **Testing**: Thoroughly test all payment flows and discount codes
-6. **Database Integration**: Replace sample discount codes with database storage
+5. **Testing**: Thoroughly test all payment flows and promotion codes
+6. **Promotion Code Setup**: Create your production promotion codes in Stripe
 
 ## Troubleshooting
 
@@ -189,10 +215,11 @@ Before going live:
    - Check your secret key configuration
    - Verify the API route is accessible
 
-4. **Discount Code Not Working**
-   - Check the discount code validation logic
+4. **Promotion Code Not Working**
+   - Check if the code exists in your Stripe account
    - Verify minimum order requirements
    - Check if the code has expired or reached usage limit
+   - Ensure the code is active in Stripe Dashboard
 
 5. **3D Secure Issues**
    - Test with the 3D Secure test card
@@ -203,6 +230,7 @@ Before going live:
 For Stripe-specific issues, refer to:
 - [Stripe Documentation](https://stripe.com/docs)
 - [Stripe Support](https://support.stripe.com)
+- [Stripe Promotion Codes Guide](https://stripe.com/docs/billing/subscriptions/discounts)
 
 For application-specific issues, check:
 - Browser console for errors
@@ -218,8 +246,8 @@ After setup, consider implementing:
 3. **Email Notifications**: Send order confirmations
 4. **Inventory Management**: Update stock levels after purchase
 5. **Analytics**: Track payment success rates and conversion
-6. **Database Integration**: Store discount codes in your database
-7. **Advanced Discount Rules**: Product-specific, user-specific, or time-based discounts
-8. **Bulk Code Generation**: Create multiple codes for campaigns
-9. **Usage Analytics**: Track which codes are most effective
-10. **A/B Testing**: Test different discount strategies 
+6. **Advanced Promotion Rules**: Product-specific, user-specific, or time-based discounts
+7. **Bulk Code Generation**: Create multiple codes for campaigns
+8. **Usage Analytics**: Track which codes are most effective
+9. **A/B Testing**: Test different discount strategies
+10. **Customer Segmentation**: Target specific customer groups with promotions 

@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateDiscountCode, calculateDiscount } from '@/app/lib/discounts';
+import { validatePromotionCode } from '@/app/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    const { code, subtotal } = await request.json();
+    const { code } = await request.json();
 
-    if (!code || !subtotal) {
+    if (!code) {
       return NextResponse.json(
-        { error: 'Discount code and subtotal are required' },
+        { error: 'Promotion code is required' },
         { status: 400 }
       );
     }
 
-    const validation = validateDiscountCode(code, subtotal);
+    const validation = await validatePromotionCode(code);
 
     if (!validation.isValid) {
       return NextResponse.json(
@@ -21,23 +21,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { discountAmount, finalAmount } = calculateDiscount(validation.discount!, subtotal);
+    // At this point, validation.isValid is true, so promotionCode and discount exist
+    const { promotionCode, discount } = validation;
 
     return NextResponse.json({
       success: true,
       discount: {
-        code: validation.discount!.code,
-        type: validation.discount!.type,
-        value: validation.discount!.value,
-        discountAmount,
-        finalAmount,
-        savings: discountAmount,
+        code: promotionCode.code,
+        type: discount.type,
+        value: discount.value,
+        currency: discount.currency,
+        name: discount.name,
+        promotionCodeId: promotionCode.id,
       },
     });
   } catch (error) {
-    console.error('Error validating discount code:', error);
+    console.error('Error validating promotion code:', error);
     return NextResponse.json(
-      { error: 'Failed to validate discount code' },
+      { error: 'Failed to validate promotion code' },
       { status: 500 }
     );
   }

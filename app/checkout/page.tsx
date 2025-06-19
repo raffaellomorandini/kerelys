@@ -21,10 +21,8 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   const subtotal = getTotalPrice();
-  const discountAmount = appliedDiscount ? appliedDiscount.savings : 0;
-  const finalSubtotal = subtotal - discountAmount;
-  const taxAmount = finalSubtotal * 0.08;
-  const totalAmount = finalSubtotal + taxAmount;
+  const taxAmount = subtotal * 0.08;
+  const totalAmount = subtotal + taxAmount;
 
   useEffect(() => {
     if (state.items.length === 0) {
@@ -42,7 +40,7 @@ export default function CheckoutPage() {
           body: JSON.stringify({
             amount: totalAmount,
             currency: 'usd',
-            discount: appliedDiscount,
+            promotionCode: appliedDiscount?.promotionCodeId,
           }),
         });
 
@@ -184,7 +182,6 @@ export default function CheckoutPage() {
               {/* Discount Code */}
               <div className="mb-6">
                 <DiscountCode
-                  subtotal={subtotal}
                   onDiscountApplied={handleDiscountApplied}
                   onDiscountRemoved={handleDiscountRemoved}
                   appliedDiscount={appliedDiscount}
@@ -197,13 +194,6 @@ export default function CheckoutPage() {
                   <span className="text-gray-600">Subtotal</span>
                   <span className="text-gray-900">{formatPrice(subtotal)}</span>
                 </div>
-                
-                {appliedDiscount && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-green-600">Discount ({appliedDiscount.code})</span>
-                    <span className="text-green-600 font-medium">-{formatPrice(discountAmount)}</span>
-                  </div>
-                )}
                 
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
@@ -223,15 +213,18 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Savings Summary */}
+              {/* Applied Promotion */}
               {appliedDiscount && (
                 <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-green-800">You saved:</span>
+                    <span className="text-sm font-medium text-green-800">Applied Promotion:</span>
                     <span className="text-lg font-bold text-green-800">
-                      {formatPrice(discountAmount)}
+                      {appliedDiscount.code}
                     </span>
                   </div>
+                  <p className="text-xs text-green-600 mt-1">
+                    {appliedDiscount.name} - Stripe will apply the discount
+                  </p>
                 </div>
               )}
 
