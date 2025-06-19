@@ -435,49 +435,46 @@ export default function Home() {
                   {pkg.id === 6 && <div className="text-sm text-green-600 font-semibold mt-2">Save $96</div>}
                 </div>
                 
-                <ul className="space-y-4 mb-8">
-                  {pkg.features.map((f, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
-                      <span className="text-gray-700">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <div className="text-xs text-green-700 mb-6 flex items-center gap-2 justify-center">
-                  <FaShippingFast className="text-green-600" />
-                  Free Express Shipping
+                <div className="flex-grow">
+                  <ul className="space-y-4 mb-8">
+                    {pkg.features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
+                        <span className="text-gray-700">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
                 
-                <div className="flex-grow"></div>
-                
-                {/* Buttons Section */}
-                <div className="space-y-3">
-                  <Link
-                    href={`/products/${pkg.id}`}
-                    className="w-full py-4 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2 flex items-center justify-center"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    View Details
-                  </Link>
-                  
-                  <button
-                    className="w-full py-4 px-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg flex items-center justify-center"
-                    onClick={e => { 
-                      e.stopPropagation(); 
-                      addItem({
-                        id: pkg.id,
-                        name: pkg.name,
-                        price: pkg.price,
-                        stripeProductId: pkg.stripeProductId,
-                        image: "/product.png"
-                      });
-                      toast.success(`${pkg.name} added to cart!`);
-                    }}
-                    aria-label={`Add ${pkg.name} to cart`}
-                  >
-                    Add to Cart - ${pkg.price}
-                  </button>
+                <div className="mt-auto pt-4">
+                  {/* Buttons Section */}
+                  <div className="space-y-3">
+                    <Link
+                      href={`/products/${pkg.id}`}
+                      className="w-full py-4 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2 flex items-center justify-center"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      View Details
+                    </Link>
+                    
+                    <button
+                      className="w-full py-4 px-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg flex items-center justify-center"
+                      onClick={e => { 
+                        e.stopPropagation(); 
+                        addItem({
+                          id: pkg.id,
+                          name: pkg.name,
+                          price: pkg.price,
+                          stripeProductId: pkg.stripeProductId,
+                          image: "/product.png"
+                        });
+                        toast.success(`${pkg.name} added to cart!`);
+                      }}
+                      aria-label={`Add ${pkg.name} to cart`}
+                    >
+                      Add to Cart - ${pkg.price}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -496,14 +493,16 @@ export default function Home() {
           </div>
           
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
-                <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
+              <div className="flex-grow">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
+                  <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+                </div>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  "Kerelys Minoxidil changed my life! My hair is fuller and I feel so much more confident. The results were visible within just a few months."
+                </p>
               </div>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                "Kerelys Minoxidil changed my life! My hair is fuller and I feel so much more confident. The results were visible within just a few months."
-              </p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                   <span className="text-gray-600 font-semibold">AR</span>
@@ -515,14 +514,16 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
-                <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
+              <div className="flex-grow">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
+                  <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+                </div>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  "I saw real results in just 3 months. The best investment I've made for myself. The customer service is exceptional too."
+                </p>
               </div>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                "I saw real results in just 3 months. The best investment I've made for myself. The customer service is exceptional too."
-              </p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                   <span className="text-gray-600 font-semibold">JL</span>
@@ -534,14 +535,16 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
-                <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 flex flex-col">
+              <div className="flex-grow">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400" />)}
+                  <span className="text-xs text-green-700 ml-2 font-semibold">Verified Buyer</span>
+                </div>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  "Easy to use, fast shipping, and the customer support is amazing! I've been using it for 6 months and the results are incredible."
+                </p>
               </div>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                "Easy to use, fast shipping, and the customer support is amazing! I've been using it for 6 months and the results are incredible."
-              </p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                   <span className="text-gray-600 font-semibold">MS</span>

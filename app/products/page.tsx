@@ -218,55 +218,42 @@ export default function ProductsPage() {
                   {pkg.id === 6 && <div className="text-sm text-green-600 font-semibold mt-2">Save $96</div>}
                 </div>
                 
-                <ul className="space-y-4 mb-8">
-                  {pkg.features.map((f, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
-                      <span className="text-gray-700">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                {/* <details className="mb-6">
-                  <summary className="text-[#8B4513] font-semibold cursor-pointer hover:text-[#A0522D] transition-colors">
-                    What's included?
-                  </summary>
-                  <ul className="text-gray-600 text-sm mt-3 space-y-2 pl-4">
-                    <li>• 1x Kerelys Minoxidil bottle per month</li>
-                    <li>• Easy-apply dropper</li>
-                    <li>• Progress tracking guide</li>
-                    <li>• Access to support team</li>
+                <div className="flex-grow">
+                  <ul className="space-y-4 mb-8">
+                    {pkg.features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
+                        <span className="text-gray-700">{f}</span>
+                      </li>
+                    ))}
                   </ul>
-                </details> */}
-                
-                <div className="text-xs text-green-700 mb-4 flex items-center gap-2 justify-center">
-                  <FaShippingFast className="text-green-600" />
-                  Free Express Shipping
                 </div>
                 
-                <div className="space-y-3">
-                  <Link
-                    href={`/products/${pkg.id}`}
-                    className="w-full py-3 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2 text-center block"
-                  >
-                    View Details
-                  </Link>
-                  
-                  <button
-                    className="w-full py-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg"
-                    onClick={() => {
-                      addItem({
-                        id: pkg.id,
-                        name: pkg.name,
-                        price: pkg.price,
-                        stripeProductId: pkg.stripeProductId,
-                        image: "/product.png"
-                      });
-                      toast.success(`${pkg.name} added to cart!`);
-                    }}
-                  >
-                    Add to Cart - ${pkg.price}
-                  </button>
+                <div className="mt-auto pt-4">
+                  <div className="space-y-3">
+                    <Link
+                      href={`/products/${pkg.id}`}
+                      className="w-full py-3 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2 text-center block"
+                    >
+                      View Details
+                    </Link>
+                    
+                    <button
+                      className="w-full py-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg"
+                      onClick={() => {
+                        addItem({
+                          id: pkg.id,
+                          name: pkg.name,
+                          price: pkg.price,
+                          stripeProductId: pkg.stripeProductId,
+                          image: "/product.png"
+                        });
+                        toast.success(`${pkg.name} added to cart!`);
+                      }}
+                    >
+                      Add to Cart - ${pkg.price}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
