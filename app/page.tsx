@@ -6,6 +6,10 @@ import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram,
 import { addEmail } from "./actions";
 import { toast } from "sonner";
 import NewsletterDialog from "./components/NewsletterDialog";
+import Cart from "./components/Cart";
+import CartIcon from "./components/CartIcon";
+import { useCart } from "./contexts/CartContext";
+import Link from "next/link";
 
 interface PackageType {
   id: number;
@@ -26,6 +30,7 @@ export default function Home() {
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
+  const { addItem } = useCart();
   const packages: PackageType[] = [
     {
       id: 1,
@@ -169,7 +174,8 @@ export default function Home() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-              <a href="#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Products</a>
+              <Link href="/products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Products</Link>
+              <a href="#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Shop</a>
               <a href="#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Why Kerelys?</a>
               <a href="#testimonials" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Reviews</a>
               <a href="#faq" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">FAQ</a>
@@ -177,8 +183,8 @@ export default function Home() {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4 lg:hidden">
-             
+            <div className="flex items-center space-x-4">
+              <CartIcon />
               <button 
                 className="lg:hidden p-2 text-gray-600 hover:text-[#8B4513] hover:bg-gray-50 rounded-lg transition-colors" 
                 aria-label="Open navigation" 
@@ -208,7 +214,8 @@ export default function Home() {
                 </button>
               </div>
               <div className="flex flex-col space-y-4">
-                <a href="#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Products</a>
+                <Link href="/products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Products</Link>
+                <a href="#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Shop</a>
                 <a href="#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Why Kerelys?</a>
                 <a href="#testimonials" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Reviews</a>
                 <a href="#faq" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>FAQ</a>
@@ -454,17 +461,33 @@ export default function Home() {
                   Free Express Shipping
                 </div>
                 
-                <button
-                  className={`w-full py-4 rounded-lg font-semibold transition-all duration-300 ${
-                    selectedPackage?.id === pkg.id 
-                      ? 'bg-[#8B4513] text-white shadow-lg' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
-                  }`}
-                  onClick={e => { e.stopPropagation(); }}
-                  aria-label={`Buy ${pkg.name} now`}
-                >
-                  {selectedPackage?.id === pkg.id ? 'Selected' : 'Buy Now'}
-                </button>
+                <div className="space-y-3">
+                  <Link
+                    href={`/products/${pkg.id}`}
+                    className="w-full py-3 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    View Details
+                  </Link>
+                  
+                  <button
+                    className="w-full py-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg"
+                    onClick={e => { 
+                      e.stopPropagation(); 
+                      addItem({
+                        id: pkg.id,
+                        name: pkg.name,
+                        price: pkg.price,
+                        stripeProductId: pkg.stripeProductId,
+                        image: "/product.png"
+                      });
+                      toast.success(`${pkg.name} added to cart!`);
+                    }}
+                    aria-label={`Add ${pkg.name} to cart`}
+                  >
+                    Add to Cart - ${pkg.price}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -607,6 +630,9 @@ export default function Home() {
         isOpen={showNewsletterDialog} 
         onClose={() => setShowNewsletterDialog(false)} 
       />
+
+      {/* Cart */}
+      <Cart />
 
       {/* Footer */}
       <footer id="contact" className="w-full bg-gray-900 text-white py-16">
