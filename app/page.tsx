@@ -144,8 +144,6 @@ export default function Home() {
       };
     }
   }, [showNewsletterDialog]);
-
-  // Social proof popup logic
  
 
   return (
