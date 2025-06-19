@@ -40,7 +40,7 @@ NEXTAUTH_URL=http://localhost:3000
 - **Features**:
   - Stripe Elements integration
   - Custom styling matching your brand
-  - Order summary sidebar
+  - Order summary sidebar with discount codes
   - Responsive design
 
 ### 2. Payment Method Selection
@@ -55,20 +55,58 @@ NEXTAUTH_URL=http://localhost:3000
 - **Location**: `/app/components/PreCheckout.tsx`
 - **Features**:
   - Payment method preview
-  - Order summary
+  - Order summary with discount codes
   - Security badges
   - Benefits display
 
-### 4. API Routes
-- **Payment Intent Creation**: `/app/api/create-payment-intent/route.ts`
-- **Stripe Configuration**: `/app/lib/stripe.ts`
+### 4. Discount Codes System
+- **Location**: `/app/components/DiscountCode.tsx`
+- **Features**:
+  - Real-time discount code validation
+  - Percentage and fixed amount discounts
+  - Minimum order requirements
+  - Usage limits and expiration dates
+  - Visual feedback and savings display
 
-### 5. Success Page
+### 5. API Routes
+- **Payment Intent Creation**: `/app/api/create-payment-intent/route.ts`
+- **Discount Validation**: `/app/api/validate-discount/route.ts`
+- **Stripe Configuration**: `/app/lib/stripe.ts`
+- **Discount Logic**: `/app/lib/discounts.ts`
+
+### 6. Success Page
 - **Location**: `/app/payment-success/page.tsx`
 - **Features**:
   - Payment confirmation
   - Next steps information
   - Order tracking details
+
+### 7. Admin Management
+- **Location**: `/app/components/DiscountCodesManager.tsx`
+- **Features**:
+  - View all discount codes
+  - Usage statistics and limits
+  - Status tracking (Active, Expired, Used Up)
+  - Code management interface
+
+## Discount Codes
+
+### Sample Codes for Testing
+The system includes several sample discount codes for testing:
+
+- **WELCOME10**: 10% off, minimum $50 order, max $25 discount
+- **SAVE20**: 20% off, minimum $100 order, max $50 discount  
+- **FREESHIP**: $10 off, minimum $75 order
+- **FLASH25**: 25% off, minimum $25 order, max $100 discount (fully used)
+
+### Discount Code Features
+- **Real-time Validation**: Codes are validated instantly as users type
+- **Multiple Types**: Percentage-based and fixed amount discounts
+- **Usage Limits**: Set maximum usage per code
+- **Minimum Orders**: Require minimum purchase amounts
+- **Expiration Dates**: Automatic expiration handling
+- **Visual Feedback**: Clear success/error messages
+- **Savings Display**: Shows exact amount saved
 
 ## Testing the Integration
 
@@ -86,12 +124,19 @@ Use these test card numbers in Stripe test mode:
 3. **3D Secure**: Use `4000002500003155`
 4. **Insufficient Funds**: Use `4000000000009995`
 
+### Discount Code Testing
+1. **Valid Code**: Try `WELCOME10` with orders over $50
+2. **Invalid Code**: Try any random code
+3. **Expired Code**: Try `FLASH25` (fully used)
+4. **Minimum Order**: Try `SAVE20` with orders under $100
+
 ## Security Features
 
 - **PCI DSS Compliance**: All payment data is handled by Stripe
 - **SSL Encryption**: 256-bit encryption for all transactions
 - **Tokenization**: Card data is never stored on your servers
 - **Fraud Protection**: Stripe's built-in fraud detection
+- **Discount Validation**: Server-side validation prevents abuse
 
 ## Customization
 
@@ -109,6 +154,14 @@ To add or remove payment methods:
 2. Update the `paymentMethodOrder` in the Stripe Elements configuration
 3. Modify the payment intent creation to include/exclude specific methods
 
+### Discount Codes
+To customize discount codes:
+
+1. Edit the `sampleDiscountCodes` array in `/app/lib/discounts.ts`
+2. Add new validation rules in the `validateDiscountCode` function
+3. Modify the discount calculation logic in `calculateDiscount`
+4. Update the admin interface in `DiscountCodesManager.tsx`
+
 ## Production Deployment
 
 Before going live:
@@ -117,7 +170,8 @@ Before going live:
 2. **Webhook Setup**: Configure webhooks for payment events
 3. **Domain Verification**: Add your domain to Stripe's allowed list
 4. **SSL Certificate**: Ensure your site has a valid SSL certificate
-5. **Testing**: Thoroughly test all payment flows
+5. **Testing**: Thoroughly test all payment flows and discount codes
+6. **Database Integration**: Replace sample discount codes with database storage
 
 ## Troubleshooting
 
@@ -135,7 +189,12 @@ Before going live:
    - Check your secret key configuration
    - Verify the API route is accessible
 
-4. **3D Secure Issues**
+4. **Discount Code Not Working**
+   - Check the discount code validation logic
+   - Verify minimum order requirements
+   - Check if the code has expired or reached usage limit
+
+5. **3D Secure Issues**
    - Test with the 3D Secure test card
    - Ensure your domain is properly configured
 
@@ -158,4 +217,9 @@ After setup, consider implementing:
 2. **Order Management**: Store order details in your database
 3. **Email Notifications**: Send order confirmations
 4. **Inventory Management**: Update stock levels after purchase
-5. **Analytics**: Track payment success rates and conversion 
+5. **Analytics**: Track payment success rates and conversion
+6. **Database Integration**: Store discount codes in your database
+7. **Advanced Discount Rules**: Product-specific, user-specific, or time-based discounts
+8. **Bulk Code Generation**: Create multiple codes for campaigns
+9. **Usage Analytics**: Track which codes are most effective
+10. **A/B Testing**: Test different discount strategies 

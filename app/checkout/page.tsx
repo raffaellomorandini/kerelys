@@ -6,6 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../contexts/CartContext';
 import CheckoutForm from '../components/CheckoutForm';
+import DiscountCode from '../components/DiscountCode';
 import { toast } from 'sonner';
 import { FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
 
@@ -16,9 +17,14 @@ export default function CheckoutPage() {
   const { state, getTotalPrice, clearCart } = useCart();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [appliedDiscount, setAppliedDiscount] = useState<any>(null);
   const router = useRouter();
 
-  const totalAmount = getTotalPrice();
+  const subtotal = getTotalPrice();
+  const discountAmount = appliedDiscount ? appliedDiscount.savings : 0;
+  const finalSubtotal = subtotal - discountAmount;
+  const taxAmount = finalSubtotal * 0.08;
+  const totalAmount = finalSubtotal + taxAmount;
 
   useEffect(() => {
     if (state.items.length === 0) {
@@ -36,6 +42,7 @@ export default function CheckoutPage() {
           body: JSON.stringify({
             amount: totalAmount,
             currency: 'usd',
+            discount: appliedDiscount,
           }),
         });
 
@@ -54,7 +61,7 @@ export default function CheckoutPage() {
     };
 
     createPaymentIntent();
-  }, [totalAmount, state.items.length, router]);
+  }, [totalAmount, state.items.length, router, appliedDiscount]);
 
   const handlePaymentSuccess = (paymentIntentId: string) => {
     toast.success('Payment successful! Your order has been placed.');
@@ -64,6 +71,21 @@ export default function CheckoutPage() {
 
   const handlePaymentCancel = () => {
     router.push('/');
+  };
+
+  const handleDiscountApplied = (discount: any) => {
+    setAppliedDiscount(discount);
+  };
+
+  const handleDiscountRemoved = () => {
+    setAppliedDiscount(null);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price);
   };
 
   if (state.items.length === 0) {
@@ -100,7 +122,7 @@ export default function CheckoutPage() {
             <div className="text-right">
               <p className="text-sm text-gray-600">Order Total</p>
               <p className="text-lg font-bold text-[#8B4513]">
-                ${totalAmount.toFixed(2)}
+                {formatPrice(totalAmount)}
               </p>
             </div>
           </div>
@@ -153,32 +175,65 @@ export default function CheckoutPage() {
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-gray-900">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatPrice(item.price * item.quantity)}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-gray-200 pt-4 space-y-2">
+              {/* Discount Code */}
+              <div className="mb-6">
+                <DiscountCode
+                  subtotal={subtotal}
+                  onDiscountApplied={handleDiscountApplied}
+                  onDiscountRemoved={handleDiscountRemoved}
+                  appliedDiscount={appliedDiscount}
+                />
+              </div>
+
+              {/* Price Breakdown */}
+              <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">${totalAmount.toFixed(2)}</span>
+                  <span className="text-gray-900">{formatPrice(subtotal)}</span>
                 </div>
+                
+                {appliedDiscount && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600">Discount ({appliedDiscount.code})</span>
+                    <span className="text-green-600 font-medium">-{formatPrice(discountAmount)}</span>
+                  </div>
+                )}
+                
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
                   <span className="text-green-600 font-medium">Free</span>
                 </div>
+                
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Tax</span>
-                  <span className="text-gray-900">${(totalAmount * 0.08).toFixed(2)}</span>
+                  <span className="text-gray-900">{formatPrice(taxAmount)}</span>
                 </div>
+                
                 <div className="flex justify-between text-lg font-bold border-t border-gray-200 pt-2">
                   <span className="text-gray-900">Total</span>
                   <span className="text-[#8B4513]">
-                    ${(totalAmount * 1.08).toFixed(2)}
+                    {formatPrice(totalAmount)}
                   </span>
                 </div>
               </div>
+
+              {/* Savings Summary */}
+              {appliedDiscount && (
+                <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-green-800">You saved:</span>
+                    <span className="text-lg font-bold text-green-800">
+                      {formatPrice(discountAmount)}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Security Badges */}
               <div className="mt-6 pt-6 border-t border-gray-200">

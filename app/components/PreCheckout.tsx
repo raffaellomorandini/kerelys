@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../contexts/CartContext';
 import PaymentMethods from './PaymentMethods';
+import DiscountCode from './DiscountCode';
 import { FaArrowRight, FaShoppingBag, FaLock } from 'react-icons/fa';
 
 interface PreCheckoutProps {
@@ -13,11 +14,14 @@ interface PreCheckoutProps {
 export default function PreCheckout({ onClose }: PreCheckoutProps) {
   const { state, getTotalPrice } = useCart();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('card');
+  const [appliedDiscount, setAppliedDiscount] = useState<any>(null);
   const router = useRouter();
 
-  const totalAmount = getTotalPrice();
-  const taxAmount = totalAmount * 0.08;
-  const finalTotal = totalAmount + taxAmount;
+  const subtotal = getTotalPrice();
+  const discountAmount = appliedDiscount ? appliedDiscount.savings : 0;
+  const finalSubtotal = subtotal - discountAmount;
+  const taxAmount = finalSubtotal * 0.08;
+  const finalTotal = finalSubtotal + taxAmount;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -29,6 +33,14 @@ export default function PreCheckout({ onClose }: PreCheckoutProps) {
   const handleProceedToCheckout = () => {
     onClose();
     router.push('/checkout');
+  };
+
+  const handleDiscountApplied = (discount: any) => {
+    setAppliedDiscount(discount);
+  };
+
+  const handleDiscountRemoved = () => {
+    setAppliedDiscount(null);
   };
 
   if (state.items.length === 0) {
@@ -82,7 +94,7 @@ export default function PreCheckout({ onClose }: PreCheckoutProps) {
               {/* Order Summary */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
-                <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                <div className="bg-gray-50 rounded-lg p-4 space-y-3 mb-4">
                   {state.items.map((item) => (
                     <div key={item.id} className="flex justify-between items-center">
                       <div className="flex-1">
@@ -96,12 +108,30 @@ export default function PreCheckout({ onClose }: PreCheckoutProps) {
                   ))}
                 </div>
 
+                {/* Discount Code */}
+                <div className="mb-4">
+                  <DiscountCode
+                    subtotal={subtotal}
+                    onDiscountApplied={handleDiscountApplied}
+                    onDiscountRemoved={handleDiscountRemoved}
+                    appliedDiscount={appliedDiscount}
+                  />
+                </div>
+
                 {/* Price Breakdown */}
-                <div className="mt-4 space-y-2">
+                <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="text-gray-900">{formatPrice(totalAmount)}</span>
+                    <span className="text-gray-900">{formatPrice(subtotal)}</span>
                   </div>
+                  
+                  {appliedDiscount && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-green-600">Discount ({appliedDiscount.code})</span>
+                      <span className="text-green-600 font-medium">-{formatPrice(discountAmount)}</span>
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping</span>
                     <span className="text-green-600 font-medium">Free</span>
@@ -115,6 +145,18 @@ export default function PreCheckout({ onClose }: PreCheckoutProps) {
                     <span className="text-[#8B4513]">{formatPrice(finalTotal)}</span>
                   </div>
                 </div>
+
+                {/* Savings Summary */}
+                {appliedDiscount && (
+                  <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-green-800">You saved:</span>
+                      <span className="text-lg font-bold text-green-800">
+                        {formatPrice(discountAmount)}
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Benefits */}
                 <div className="mt-6 bg-blue-50 rounded-lg p-4">
