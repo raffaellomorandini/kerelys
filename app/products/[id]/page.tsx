@@ -10,6 +10,9 @@ import Cart from "../../components/Cart";
 import CartIcon from "../../components/CartIcon";
 import { useCart } from "../../contexts/CartContext";
 import Link from "next/link";
+import { use } from 'react'
+ 
+type Params = Promise<{ id: string }>
 
 interface PackageType {
   id: number;
@@ -173,7 +176,7 @@ const packages: PackageType[] = [
   }
 ];
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductPage({ params }: { params: Params }) {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
@@ -181,7 +184,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const { addItem } = useCart();
-  const id = (await params).id;
+  const id = use(params).id;
 
   const product = packages.find(pkg => pkg.id === parseInt(id));
 
