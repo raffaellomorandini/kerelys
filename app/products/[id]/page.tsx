@@ -176,7 +176,7 @@ const packages: PackageType[] = [
   }
 ];
 
-export default async function ProductPage({ params }: { params: Params }) {
+export default function ProductPage({ params }: { params: Params }) {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);

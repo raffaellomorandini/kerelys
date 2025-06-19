@@ -400,7 +400,7 @@ export default function Home() {
             {packages.map((pkg, idx) => (
               <div
                 key={pkg.id}
-                className={`bg-white rounded-2xl p-8 shadow-lg border-2 transition-all duration-300 relative hover:shadow-xl ${
+                className={`bg-white rounded-2xl p-8 shadow-lg border-2 transition-all duration-300 relative hover:shadow-xl flex flex-col h-full ${
                   selectedPackage?.id === pkg.id 
                     ? 'border-[#8B4513] shadow-xl' 
                     : 'border-gray-200 hover:border-[#8B4513]'
@@ -435,7 +435,7 @@ export default function Home() {
                   {pkg.id === 6 && <div className="text-sm text-green-600 font-semibold mt-2">Save $96</div>}
                 </div>
                 
-                <ul className="space-y-4 mb-8">
+                <ul className="space-y-4 mb-8 flex-grow">
                   {pkg.features.map((f, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
@@ -461,7 +461,7 @@ export default function Home() {
                   Free Express Shipping
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-3 mt-auto">
                   <Link
                     href={`/products/${pkg.id}`}
                     className="w-full py-3 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2"
