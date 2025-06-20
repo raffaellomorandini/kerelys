@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import PreCheckout from './PreCheckout';
+import FastPaymentButtons from './FastPaymentButtons';
 
 export default function Cart() {
   const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalItems, getTotalPrice } = useCart();
@@ -143,21 +144,21 @@ export default function Cart() {
                 </span>
               </div>
               
+              {/* Fast Payment Buttons */}
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-3 text-center font-medium">Pay instantly with:</p>
+                <div className="bg-gradient-to-br from-blue-50 via-white to-gray-50 rounded-xl p-3 border border-gray-100 shadow-sm">
+                  <FastPaymentButtons variant="primary" size="sm" />
+                </div>
+              </div>
+              
               <div className="space-y-3">
                 <button
                   onClick={handleCheckout}
                   className="w-full bg-[#8B4513] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors flex items-center justify-center gap-2"
                 >
                   <FaLock className="text-sm" />
-                  Checkout
-                </button>
-                
-                <button
-                  onClick={handleViewPaymentOptions}
-                  className="w-full border border-[#8B4513] text-[#8B4513] py-2 px-4 rounded-lg font-semibold hover:bg-[#8B4513] hover:text-white transition-colors flex items-center justify-center gap-2"
-                >
-                  <FaCreditCard className="text-sm" />
-                  View Payment Options
+                  View All Payment Options
                 </button>
                 
                 <button

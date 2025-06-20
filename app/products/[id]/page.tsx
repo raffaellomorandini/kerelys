@@ -2,16 +2,18 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots, FaGift, FaArrowLeft, FaHeart, FaShare } from "react-icons/fa";
+import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots, FaGift, FaArrowLeft, FaHeart, FaShare, FaApple } from "react-icons/fa";
 import { addEmail } from "../../actions";
 import { toast } from "sonner";
 import NewsletterDialog from "../../components/NewsletterDialog";
 import Cart from "../../components/Cart";
 import CartIcon from "../../components/CartIcon";
 import { useCart } from "../../contexts/CartContext";
+import FastPaymentButtons from "../../components/FastPaymentButtons";
 import Link from "next/link";
 import { use } from 'react'
- 
+import { useRouter } from "next/navigation";
+
 type Params = Promise<{ id: string }>
 
 interface PackageType {
@@ -185,6 +187,7 @@ export default function ProductPage({ params }: { params: Params }) {
   const [activeTab, setActiveTab] = useState('overview');
   const { addItem } = useCart();
   const id = use(params).id;
+  const router = useRouter();
 
   const product = packages.find(pkg => pkg.id === parseInt(id));
 
@@ -380,6 +383,15 @@ export default function ProductPage({ params }: { params: Params }) {
                 >
                   Add to Cart - ${product.price}
                 </button>
+                
+                {/* Fast Payment Buttons */}
+                <div className="border-t border-gray-200 pt-4">
+                  <p className="text-sm text-gray-600 mb-3 text-center font-medium">Or pay instantly with:</p>
+                  <div className="bg-gradient-to-br from-blue-50 via-white to-gray-50 rounded-xl p-4 border border-gray-100 shadow-sm">
+                    <FastPaymentButtons variant="secondary" size="sm" />
+                  </div>
+                </div>
+                
                 <button 
                   className="w-full border-2 border-[#8B4513] text-[#8B4513] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#8B4513] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2"
                   onClick={() => setShowNewsletterDialog(true)}
@@ -604,21 +616,24 @@ export default function ProductPage({ params }: { params: Params }) {
                   <p className="text-sm text-gray-600">{product.per}</p>
                 </div>
               </div>
-              <button 
-                className="bg-[#8B4513] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors"
-                onClick={() => {
-                  addItem({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    stripeProductId: product.stripeProductId,
-                    image: "/product.png"
-                  });
-                  toast.success(`${product.name} added to cart!`);
-                }}
-              >
-                Add to Cart
-              </button>
+              <div className="flex items-center gap-3">
+                <button 
+                  className="bg-[#8B4513] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors"
+                  onClick={() => {
+                    addItem({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      stripeProductId: product.stripeProductId,
+                      image: "/product.png"
+                    });
+                    toast.success(`${product.name} added to cart!`);
+                  }}
+                >
+                  Add to Cart
+                </button>
+                <FastPaymentButtons variant="compact" />
+              </div>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import NewsletterDialog from "./components/NewsletterDialog";
 import Cart from "./components/Cart";
 import CartIcon from "./components/CartIcon";
 import { useCart } from "./contexts/CartContext";
+import FastPaymentButtons from "./components/FastPaymentButtons";
 import Link from "next/link";
 
 interface PackageType {
@@ -474,6 +475,14 @@ export default function Home() {
                     >
                       Add to Cart - ${pkg.price}
                     </button>
+                    
+                    {/* Fast Payment Buttons */}
+                    <div className="border-t border-gray-200 pt-4">
+                      <p className="text-sm text-gray-600 mb-3 text-center font-medium">Or pay instantly with:</p>
+                      <div className="bg-gradient-to-br from-blue-50 via-white to-gray-50 rounded-xl p-4 border border-gray-100 shadow-sm">
+                        <FastPaymentButtons variant="secondary" size="sm" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
