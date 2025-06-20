@@ -388,7 +388,17 @@ export default function ProductPage({ params }: { params: Params }) {
                 <div className="border-t border-gray-200 pt-4">
                   <p className="text-sm text-gray-600 mb-3 text-center font-medium">Or pay instantly with:</p>
                   <div className="bg-gradient-to-br from-blue-50 via-white to-gray-50 rounded-xl p-4 border border-gray-100 shadow-sm">
-                    <FastPaymentButtons variant="secondary" size="sm" />
+                    <FastPaymentButtons 
+                      variant="secondary" 
+                      size="sm" 
+                      product={{
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        stripeProductId: product.stripeProductId,
+                        image: "/product.png"
+                      }}
+                    />
                   </div>
                 </div>
                 

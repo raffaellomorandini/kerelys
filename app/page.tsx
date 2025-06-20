@@ -26,8 +26,6 @@ interface PackageType {
 export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const [detailsPackage, setDetailsPackage] = useState<PackageType | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
@@ -406,10 +404,6 @@ export default function Home() {
                     ? 'border-[#8B4513] shadow-xl' 
                     : 'border-gray-200 hover:border-[#8B4513]'
                 } ${pkg.popular ? 'border-[#8B4513] ring-2 ring-[#8B4513]/20' : ''}`}
-                onClick={() => { setDetailsOpen(true); setDetailsPackage(pkg); }}
-                tabIndex={0}
-                role="button"
-                aria-label={`View details for ${pkg.name}`}
               >
                 {pkg.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#8B4513] text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
@@ -453,15 +447,13 @@ export default function Home() {
                     <Link
                       href={`/products/${pkg.id}`}
                       className="w-full py-4 px-4 border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-semibold transition-all duration-300 hover:bg-[#8B4513] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:ring-offset-2 flex items-center justify-center"
-                      onClick={e => e.stopPropagation()}
                     >
                       View Details
                     </Link>
                     
                     <button
                       className="w-full py-4 px-4 bg-[#8B4513] text-white rounded-lg font-semibold transition-all duration-300 hover:bg-[#A0522D] shadow-lg flex items-center justify-center"
-                      onClick={e => { 
-                        e.stopPropagation(); 
+                      onClick={() => { 
                         addItem({
                           id: pkg.id,
                           name: pkg.name,
@@ -480,7 +472,17 @@ export default function Home() {
                     <div className="border-t border-gray-200 pt-4">
                       <p className="text-sm text-gray-600 mb-3 text-center font-medium">Or pay instantly with:</p>
                       <div className="bg-gradient-to-br from-blue-50 via-white to-gray-50 rounded-xl p-4 border border-gray-100 shadow-sm">
-                        <FastPaymentButtons variant="secondary" size="sm" />
+                        <FastPaymentButtons 
+                          variant="secondary" 
+                          size="sm" 
+                          product={{
+                            id: pkg.id,
+                            name: pkg.name,
+                            price: pkg.price,
+                            stripeProductId: pkg.stripeProductId,
+                            image: "/product.png"
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -736,70 +738,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Product Details Modal */}
-      {detailsOpen && detailsPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-8 relative">
-            <button 
-              onClick={() => setDetailsOpen(false)} 
-              className="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-gray-200 transition-colors" 
-              aria-label="Close details"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{detailsPackage.name}</h2>
-              <p className="text-gray-600">{detailsPackage.desc}</p>
-            </div>
-            
-            <div className="flex justify-center mb-6">
-              <Image 
-                src="/product.png" 
-                alt="Kerelys Minoxidil" 
-                width={120} 
-                height={180} 
-                className="object-contain"
-              />
-            </div>
-            
-            <div className="space-y-4 mb-6">
-              <div>
-                <h3 className="font-semibold text-[#8B4513] mb-2">How to Use</h3>
-                <ul className="text-gray-700 text-sm space-y-1">
-                  <li>• Apply 1ml to dry scalp twice daily</li>
-                  <li>• Massage gently for 1 minute</li>
-                  <li>• Do not rinse for at least 4 hours</li>
-                  <li>• See visible results in 3-6 months</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold text-[#8B4513] mb-2">What's Included</h3>
-                <ul className="text-gray-700 text-sm space-y-1">
-                  <li>• Kerelys Minoxidil Solution</li>
-                  <li>• Easy-apply dropper</li>
-                  <li>• Progress tracking guide</li>
-                  <li>• Customer support access</li>
-                </ul>
-              </div>
-            </div>
-            
-            <button 
-              className="w-full bg-[#8B4513] text-white py-3 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors" 
-              onClick={() => { setDetailsOpen(false); }}
-            >
-              Buy Now
-            </button>
-          </div>
-        </div>
-      )}
-
-  
-      
     </main>
   );
 }

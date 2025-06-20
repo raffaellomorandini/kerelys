@@ -2,21 +2,46 @@
 
 import { useRouter } from 'next/navigation';
 import { FaApple, FaPaypal, FaLock } from 'react-icons/fa';
+import { useCart } from '../contexts/CartContext';
+import { toast } from 'sonner';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  stripeProductId: string;
+  image: string;
+}
 
 interface FastPaymentButtonsProps {
   variant?: 'primary' | 'secondary' | 'compact';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  product?: Product;
 }
 
 export default function FastPaymentButtons({ 
   variant = 'primary', 
   size = 'md',
-  className = '' 
+  className = '',
+  product
 }: FastPaymentButtonsProps) {
   const router = useRouter();
+  const { addItem } = useCart();
 
   const handleFastPayment = (method: string) => {
+    // If a product is provided, add it to cart first
+    if (product) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        stripeProductId: product.stripeProductId,
+        image: product.image
+      });
+      toast.success(`${product.name} added to cart!`);
+    }
+    
     // Navigate to checkout page
     router.push('/checkout');
   };
