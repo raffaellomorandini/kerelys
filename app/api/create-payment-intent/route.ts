@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create payment intent with the discounted amount
+    // The promotion code is still passed to Stripe for validation and tracking
     const paymentIntent = await createPaymentIntentWithPromotion(amount, currency, promotionCode);
 
     return NextResponse.json({

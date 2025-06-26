@@ -56,15 +56,15 @@ export default function FastPaymentButtons({
 
   const variantClasses = {
     primary: {
-      apple: "bg-black text-white border-black hover:bg-gray-800 hover:border-gray-800",
+      apple: "bg-black text-white border-black hover:bg-slate-800 hover:border-slate-800",
       paypal: "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700"
     },
     secondary: {
-      apple: "bg-white text-black border-black hover:bg-gray-50 hover:shadow-lg",
+      apple: "bg-white text-black border-black hover:bg-slate-50 hover:shadow-lg",
       paypal: "bg-white text-blue-600 border-blue-600 hover:bg-blue-50 hover:shadow-lg"
     },
     compact: {
-      apple: "bg-black text-white border-black hover:bg-gray-800",
+      apple: "bg-black text-white border-black hover:bg-slate-800",
       paypal: "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
     }
   };
@@ -75,7 +75,7 @@ export default function FastPaymentButtons({
       <div className={`flex gap-2 ${className}`}>
         <button
           onClick={() => handleFastPayment('apple')}
-          className="p-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md"
+          className="p-3 bg-black text-white rounded-lg hover:bg-slate-800 transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md"
           title="Pay with Apple Pay"
         >
           <FaApple className="text-xl" />
@@ -114,7 +114,7 @@ export default function FastPaymentButtons({
       </button>
 
       {/* Security Notice */}
-      <div className="text-xs text-gray-500 text-center mt-3">
+      <div className="text-xs text-slate-500 text-center mt-3">
         <p>🔒 Secure payment powered by Stripe</p>
         <p>All payments are encrypted and secure</p>
       </div>

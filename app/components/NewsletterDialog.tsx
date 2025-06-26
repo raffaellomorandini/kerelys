@@ -58,7 +58,7 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-gray-200 transition-colors z-10"
+          className="absolute top-4 right-4 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:text-slate-800 hover:bg-slate-200 transition-colors z-10"
           aria-label="Close dialog"
         >
           <FaTimes className="w-4 h-4" />
@@ -69,30 +69,30 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
           <div className="p-8">
             {/* Header */}
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#8B4513] to-[#A0522D] rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaGift className="text-white text-2xl" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">
                 Get Your Exclusive Discount!
               </h2>
-              <p className="text-gray-600">
+              <p className="text-slate-600">
                 Subscribe to our newsletter and receive a special discount code for your first purchase.
               </p>
             </div>
 
             {/* Benefits */}
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 mb-6">
+            <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg p-4 mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <FaCheckCircle className="text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-900">Exclusive hair care tips</span>
+                <FaCheckCircle className="text-emerald-600 flex-shrink-0" />
+                <span className="text-sm font-medium text-slate-900">Exclusive hair care tips</span>
               </div>
               <div className="flex items-center gap-3 mb-3">
-                <FaCheckCircle className="text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-900">Early access to new products</span>
+                <FaCheckCircle className="text-emerald-600 flex-shrink-0" />
+                <span className="text-sm font-medium text-slate-900">Early access to new products</span>
               </div>
               <div className="flex items-center gap-3">
-                <FaCheckCircle className="text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-900">Special offers and discounts</span>
+                <FaCheckCircle className="text-emerald-600 flex-shrink-0" />
+                <span className="text-sm font-medium text-slate-900">Special offers and discounts</span>
               </div>
             </div>
 
@@ -113,18 +113,18 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
               />
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513] disabled:opacity-50"
+                    className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-blue-800 disabled:opacity-50"
                     required
                     disabled={isSubmitting}
                   />
@@ -134,7 +134,7 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#8B4513] to-[#A0522D] text-white py-3 px-6 rounded-lg font-semibold hover:from-[#A0522D] hover:to-[#8B4513] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-elegant transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -151,30 +151,30 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
             </form>
 
             {/* Privacy notice */}
-            <p className="text-xs text-gray-500 text-center mt-4">
+            <p className="text-xs text-slate-500 text-center mt-4">
               We respect your privacy. Unsubscribe at any time.
             </p>
           </div>
         ) : (
           /* Success State */
           <div className="p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FaCheckCircle className="text-green-600 text-2xl" />
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaCheckCircle className="text-emerald-600 text-2xl" />
             </div>
             
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">
               Welcome to Kerelys!
             </h2>
             
-            <p className="text-gray-600 mb-6">
+            <p className="text-slate-600 mb-6">
               Thank you for subscribing! Here's your exclusive discount code:
             </p>
 
             {/* Discount Code */}
-            <div className="bg-gradient-to-r from-[#8B4513] to-[#A0522D] rounded-lg p-4 mb-6">
+            <div className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-lg p-4 mb-6">
               <p className="text-white text-sm font-medium mb-2">Your Discount Code:</p>
               <div className="bg-white rounded-lg p-3">
-                <code className="text-2xl font-bold text-[#8B4513] tracking-wider">
+                <code className="text-2xl font-bold text-blue-800 tracking-wider">
                   {discountCode}
                 </code>
               </div>
@@ -184,16 +184,16 @@ export default function NewsletterDialog({ isOpen, onClose }: NewsletterDialogPr
             </div>
 
             <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaCheckCircle className="text-green-600 w-4 h-4" />
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <FaCheckCircle className="text-emerald-600 w-4 h-4" />
                 <span>Code sent to your email</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaCheckCircle className="text-green-600 w-4 h-4" />
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <FaCheckCircle className="text-emerald-600 w-4 h-4" />
                 <span>Valid for 30 days</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaCheckCircle className="text-green-600 w-4 h-4" />
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <FaCheckCircle className="text-emerald-600 w-4 h-4" />
                 <span>One-time use per customer</span>
               </div>
             </div>

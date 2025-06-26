@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from 'react';
-import { FaTag, FaCheck, FaTimes, FaSpinner } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaTag } from 'react-icons/fa';
 import { toast } from 'sonner';
+import { useCart } from '../contexts/CartContext';
 
 interface DiscountCodeProps {
-  onDiscountApplied: (discount: any) => void;
-  onDiscountRemoved: () => void;
+  onDiscountApplied?: (discount: any) => void;
+  onDiscountRemoved?: () => void;
   appliedDiscount?: any;
 }
 
@@ -15,9 +16,13 @@ export default function DiscountCode({
   onDiscountRemoved, 
   appliedDiscount 
 }: DiscountCodeProps) {
+  const { state, applyDiscount, removeDiscount, getTotalPrice } = useCart();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Use cart context discount if available, otherwise fall back to props
+  const currentDiscount = state.appliedDiscount || appliedDiscount;
 
   const handleApplyCode = async () => {
     if (!code.trim()) {
@@ -45,7 +50,14 @@ export default function DiscountCode({
         return;
       }
 
-      onDiscountApplied(data.discount);
+      // Apply discount to cart context
+      applyDiscount(data.discount);
+      
+      // Also call the callback if provided (for backward compatibility)
+      if (onDiscountApplied) {
+        onDiscountApplied(data.discount);
+      }
+      
       toast.success(`Promotion applied! ${data.discount.name}`);
       setCode('');
       setIsExpanded(false);
@@ -58,7 +70,14 @@ export default function DiscountCode({
   };
 
   const handleRemoveDiscount = () => {
-    onDiscountRemoved();
+    // Remove discount from cart context
+    removeDiscount();
+    
+    // Also call the callback if provided (for backward compatibility)
+    if (onDiscountRemoved) {
+      onDiscountRemoved();
+    }
+    
     toast.success('Promotion removed');
   };
 
@@ -71,20 +90,20 @@ export default function DiscountCode({
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
-      {appliedDiscount ? (
+    <div className="bg-slate-50 rounded-lg p-4">
+      {currentDiscount ? (
         // Applied discount display
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-              <FaCheck className="text-green-600 text-sm" />
+            <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+              <FaCheck className="text-emerald-600 text-sm" />
             </div>
             <div>
-              <p className="font-semibold text-green-800">
-                {appliedDiscount.code} - {getDiscountText(appliedDiscount)}
+              <p className="font-semibold text-emerald-800">
+                {currentDiscount.code} - {getDiscountText(currentDiscount)}
               </p>
-              <p className="text-sm text-green-600">
-                {appliedDiscount.name}
+              <p className="text-sm text-emerald-600">
+                {currentDiscount.name}
               </p>
             </div>
           </div>
@@ -99,17 +118,13 @@ export default function DiscountCode({
       ) : (
         // Discount code input
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <FaTag className="text-[#8B4513] text-sm" />
-            <span className="font-semibold text-gray-900">Have a promotion code?</span>
-          </div>
-          
           {!isExpanded ? (
             <button
               onClick={() => setIsExpanded(true)}
-              className="w-full text-left text-[#8B4513] hover:text-[#A0522D] font-medium transition-colors"
+              className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors"
             >
-              + Add promotion code
+              <FaTag className="text-sm" />
+              <span className="text-sm">Have a promotion code?</span>
             </button>
           ) : (
             <div className="space-y-3">
@@ -117,36 +132,31 @@ export default function DiscountCode({
                 <input
                   type="text"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  placeholder="Enter code (e.g., WELCOME10)"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:border-transparent"
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="Enter promotion code"
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent"
                   onKeyPress={(e) => e.key === 'Enter' && handleApplyCode()}
-                  disabled={isLoading}
                 />
                 <button
                   onClick={handleApplyCode}
                   disabled={isLoading || !code.trim()}
-                  className="px-4 py-2 bg-[#8B4513] text-white rounded-lg font-semibold hover:bg-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-lg text-sm font-medium hover:shadow-elegant transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? (
-                    <FaSpinner className="animate-spin text-sm" />
-                  ) : (
-                    'Apply'
-                  )}
+                  {isLoading ? 'Applying...' : 'Apply'}
                 </button>
               </div>
               
               <div className="flex items-center justify-between">
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                  className="text-slate-500 hover:text-slate-700 text-sm transition-colors"
                 >
                   Cancel
                 </button>
                 
-                {/* Note about Stripe handling */}
-                <div className="text-xs text-gray-500">
-                  Stripe will calculate your discount
+                {/* Note about discount calculation */}
+                <div className="text-xs text-slate-500">
+                  Discount will be applied to your order
                 </div>
               </div>
             </div>

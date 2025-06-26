@@ -11,9 +11,19 @@ export interface CartItem {
   image?: string;
 }
 
+export interface AppliedDiscount {
+  code: string;
+  type: 'percentage' | 'fixed';
+  value: number;
+  currency: string;
+  name: string;
+  promotionCodeId: string;
+}
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  appliedDiscount: AppliedDiscount | null;
 }
 
 type CartAction =
@@ -23,7 +33,9 @@ type CartAction =
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'CLOSE_CART' }
-  | { type: 'LOAD_CART'; payload: CartItem[] };
+  | { type: 'LOAD_CART'; payload: CartItem[] }
+  | { type: 'APPLY_DISCOUNT'; payload: AppliedDiscount }
+  | { type: 'REMOVE_DISCOUNT' };
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
@@ -62,6 +74,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         ...state,
         items: [],
+        appliedDiscount: null,
       };
     case 'TOGGLE_CART':
       return {
@@ -78,6 +91,16 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: action.payload,
       };
+    case 'APPLY_DISCOUNT':
+      return {
+        ...state,
+        appliedDiscount: action.payload,
+      };
+    case 'REMOVE_DISCOUNT':
+      return {
+        ...state,
+        appliedDiscount: null,
+      };
     default:
       return state;
   }
@@ -93,6 +116,10 @@ interface CartContextType {
   closeCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  applyDiscount: (discount: AppliedDiscount) => void;
+  removeDiscount: () => void;
+  getDiscountedTotal: () => number;
+  getDiscountAmount: () => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -109,11 +136,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [state, dispatch] = useReducer(cartReducer, {
     items: [],
     isOpen: false,
+    appliedDiscount: null,
   });
 
   // Load cart from localStorage on mount
   useEffect(() => {
     const savedCart = localStorage.getItem('kerelys-cart');
+    const savedDiscount = localStorage.getItem('kerelys-discount');
     if (savedCart) {
       try {
         const cartItems = JSON.parse(savedCart);
@@ -122,12 +151,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error loading cart from localStorage:', error);
       }
     }
+    if (savedDiscount) {
+      try {
+        const discount = JSON.parse(savedDiscount);
+        dispatch({ type: 'APPLY_DISCOUNT', payload: discount });
+      } catch (error) {
+        console.error('Error loading discount from localStorage:', error);
+      }
+    }
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart and discount to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('kerelys-cart', JSON.stringify(state.items));
-  }, [state.items]);
+    if (state.appliedDiscount) {
+      localStorage.setItem('kerelys-discount', JSON.stringify(state.appliedDiscount));
+    } else {
+      localStorage.removeItem('kerelys-discount');
+    }
+  }, [state.items, state.appliedDiscount]);
 
   const addItem = (item: Omit<CartItem, 'quantity'>) => {
     dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
@@ -165,6 +207,33 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  const getDiscountAmount = () => {
+    if (!state.appliedDiscount) return 0;
+    
+    const subtotal = getTotalPrice();
+    
+    if (state.appliedDiscount.type === 'percentage') {
+      return (subtotal * state.appliedDiscount.value) / 100;
+    } else {
+      // Fixed amount discount (value is in cents)
+      return state.appliedDiscount.value / 100;
+    }
+  };
+
+  const getDiscountedTotal = () => {
+    const subtotal = getTotalPrice();
+    const discountAmount = getDiscountAmount();
+    return Math.max(0, subtotal - discountAmount);
+  };
+
+  const applyDiscount = (discount: AppliedDiscount) => {
+    dispatch({ type: 'APPLY_DISCOUNT', payload: discount });
+  };
+
+  const removeDiscount = () => {
+    dispatch({ type: 'REMOVE_DISCOUNT' });
+  };
+
   const value: CartContextType = {
     state,
     addItem,
@@ -175,6 +244,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeCart,
     getTotalItems,
     getTotalPrice,
+    applyDiscount,
+    removeDiscount,
+    getDiscountedTotal,
+    getDiscountAmount,
   };
 
   return (
