@@ -58,8 +58,8 @@ export default function Header() {
 
       {/* Mobile Navigation Drawer */}
       {mobileNavOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-black/40" onClick={() => setMobileNavOpen(false)}>
-          <nav className="absolute top-0 right-0 w-80 h-full bg-white shadow-elegant flex flex-col p-8">
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50 h-screen" onClick={() => setMobileNavOpen(false)}>
+          <nav className="absolute top-0 right-0 w-80 h-full bg-white shadow-elegant flex flex-col p-8 border-l border-slate-200">
             <div className="flex items-center justify-between mb-8">
               <span className="text-xl font-bold text-slate-800">Menu</span>
               <button 
@@ -72,12 +72,12 @@ export default function Header() {
               </button>
             </div>
             <div className="flex flex-col space-y-4">
-              <Link href="/products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Products</Link>
-              <a href="#products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Shop</a>
-              <a href="#why" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Why Kerelys?</a>
-              <a href="#testimonials" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Reviews</a>
-              <a href="#faq" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>FAQ</a>
-              <a href="#contact" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Contact</a>
+              <Link href="/products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Products</Link>
+              <a href="#products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Shop</a>
+              <a href="#why" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Why Kerelys?</a>
+              <a href="#testimonials" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Reviews</a>
+              <a href="#faq" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>FAQ</a>
+              <a href="#contact" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Contact</a>
             </div>
           </nav>
         </div>
