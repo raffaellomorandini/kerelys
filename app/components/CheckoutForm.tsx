@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useStripe, useElements, PaymentElement, AddressElement } from '@stripe/react-stripe-js';
-import { FaApple, FaPaypal, FaGoogle, FaCreditCard, FaLock, FaSpinner } from 'react-icons/fa';
+import { FaApple, FaPaypal, FaGoogle, FaCreditCard, FaLock, FaSpinner, FaEnvelope, FaExclamationTriangle } from 'react-icons/fa';
 import { SiVisa, SiMastercard, SiAmericanexpress } from 'react-icons/si';
 import { toast } from 'sonner';
 
@@ -10,16 +10,25 @@ interface CheckoutFormProps {
   amount: number;
   onSuccess: (paymentIntentId: string) => void;
   onCancel: () => void;
+  paymentIntentId?: string | null;
 }
 
 type PaymentMethod = 'card' | 'apple_pay' | 'google_pay' | 'paypal';
 
-export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFormProps) {
+interface FormData {
+  email: string;
+}
+
+export default function CheckoutForm({ amount, onSuccess, onCancel, paymentIntentId }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('card');
   const [message, setMessage] = useState<string | null>(null);
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+  });
+  const [errors, setErrors] = useState<Partial<FormData>>({});
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -28,10 +37,53 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
     }).format(price);
   };
 
+  // Email validation function
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Form validation
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name as keyof FormData]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      toast.error('Payment system is not ready. Please try again.');
+      return;
+    }
+
+    // Validate form before proceeding
+    if (!validateForm()) {
+      toast.error('Please fix the errors above before proceeding.');
       return;
     }
 
@@ -39,10 +91,36 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
     setMessage(null);
 
     try {
+      // Get billing address from AddressElement
+      const addressElement = elements.getElement(AddressElement);
+      let billingAddress = null;
+      
+      if (addressElement) {
+        const { complete, value } = await addressElement.getValue();
+        if (complete && value) {
+          billingAddress = value;
+        }
+      }
+
+      // Update payment intent with customer email and billing info
+      if (billingAddress) {
+        try {
+          await updatePaymentIntentWithCustomerInfo(formData.email, billingAddress);
+        } catch (updateError) {
+          console.error('Failed to update payment intent with customer info:', updateError);
+          // Continue with payment even if update fails
+        }
+      }
+
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
+          payment_method_data: {
+            billing_details: {
+              email: formData.email,
+            },
+          },
         },
         redirect: 'if_required',
       });
@@ -61,6 +139,54 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
       toast.error('Payment failed');
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const updatePaymentIntentWithCustomerInfo = async (email: string, billingAddress: any) => {
+    try {
+      if (!paymentIntentId) {
+        console.warn('No payment intent ID available for update');
+        return;
+      }
+
+      const orderData = {
+        email: email,
+        totalAmount: amount,
+        currency: 'USD',
+        items: [], // Will be filled from original payment intent
+        shipping: {
+          name: `${billingAddress.name?.firstName || ''} ${billingAddress.name?.lastName || ''}`.trim() || 'Customer',
+          street: billingAddress.address?.line1 || 'Address not provided',
+          city: billingAddress.address?.city || 'City not provided',
+          zip: billingAddress.address?.postal_code || '00000',
+          province: billingAddress.address?.state || 'State not provided',
+          country: billingAddress.address?.country || 'US',
+          phone: billingAddress.phone || '',
+        },
+        meta: {
+          customerEmail: email,
+          billingComplete: true,
+        },
+      };
+
+      // Update the payment intent with customer information
+      const response = await fetch('/api/update-payment-intent-customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-payment-intent-id': paymentIntentId,
+        },
+        body: JSON.stringify({
+          orderData,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update payment intent with customer info');
+      }
+    } catch (error) {
+      console.error('Error updating payment intent with customer info:', error);
+      throw error;
     }
   };
 
@@ -133,6 +259,44 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
 
         {/* Payment Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Email Field */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaEnvelope className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513] ${
+                      errors.email ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+                {errors.email && (
+                  <div className="flex items-center gap-1 mt-1 text-sm text-red-600">
+                    <FaExclamationTriangle className="text-xs" />
+                    {errors.email}
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500">
+                We'll send your order confirmation and tracking updates to this email address.
+              </p>
+            </div>
+          </div>
+
           {/* Billing Address */}
           <div className="bg-gray-50 p-4 rounded-lg">
             <h4 className="font-semibold text-gray-900 mb-3">Billing Address</h4>
@@ -140,6 +304,9 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
               options={{
                 mode: 'billing',
                 allowedCountries: ['US', 'CA', 'GB'],
+                defaultValues: {
+                  name: 'Customer',
+                },
               }}
             />
           </div>
@@ -200,7 +367,7 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: CheckoutFo
             </button>
             <button
               type="submit"
-              disabled={!stripe || isProcessing}
+              disabled={!stripe || isProcessing || !formData.email.trim()}
               className="flex-1 bg-[#8B4513] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isProcessing ? (

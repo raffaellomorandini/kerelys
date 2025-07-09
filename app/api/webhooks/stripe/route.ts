@@ -268,12 +268,17 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
       }
     }
 
+    // Get customer email from metadata or payment intent
+    const customerEmail = paymentIntent.metadata.customerEmail || 
+                         paymentIntent.receipt_email || 
+                         'customer@example.com';
+
     // If no order data in metadata, create a basic order
     if (!orderData) {
       log('No order data in metadata, creating basic order', { paymentIntentId: paymentIntent.id });
       
       orderData = {
-        email: 'customer@example.com', // Default email
+        email: customerEmail,
         totalAmount: paymentIntent.amount / 100, // Convert from cents
         currency: paymentIntent.currency?.toUpperCase() || 'USD',
         items: [
@@ -287,7 +292,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
           },
         ],
         shipping: {
-          name: 'Customer',
+          name: paymentIntent.metadata.customerName || 'Customer',
           street: 'Address not provided',
           city: 'City not provided',
           zip: '00000',
@@ -306,7 +311,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     } else {
       // Transform simplified order data to full structure
       orderData = {
-        email: orderData.email || 'customer@example.com',
+        email: orderData.email || customerEmail,
         totalAmount: orderData.totalAmount,
         currency: orderData.currency || 'USD',
         items: orderData.items?.map((item: any) => ({
@@ -318,7 +323,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
           stripeProductId: item.stripeProductId || 'unknown',
         })) || [],
         shipping: orderData.shipping || {
-          name: 'Customer',
+          name: paymentIntent.metadata.customerName || 'Customer',
           street: 'Address not provided',
           city: 'City not provided',
           zip: '00000',

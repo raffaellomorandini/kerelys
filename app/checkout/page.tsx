@@ -16,6 +16,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 export default function CheckoutPage() {
   const { state, getTotalPrice, getDiscountedTotal, getDiscountAmount, clearCart } = useCart();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -82,6 +83,7 @@ export default function CheckoutPage() {
 
         const data = await response.json();
         setClientSecret(data.clientSecret);
+        setPaymentIntentId(data.paymentIntentId);
       } catch (error) {
         console.error('Error creating payment intent:', error);
         toast.error('Failed to initialize checkout');
@@ -176,6 +178,7 @@ export default function CheckoutPage() {
                   amount={totalAmount}
                   onSuccess={handlePaymentSuccess}
                   onCancel={handlePaymentCancel}
+                  paymentIntentId={paymentIntentId}
                 />
               </Elements>
             )}
