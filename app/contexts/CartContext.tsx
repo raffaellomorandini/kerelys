@@ -141,8 +141,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('kerelys-cart');
-    const savedDiscount = localStorage.getItem('kerelys-discount');
+    const savedCart = localStorage.getItem('klys-cart');
+    const savedDiscount = localStorage.getItem('klys-discount');
     if (savedCart) {
       try {
         const cartItems = JSON.parse(savedCart);
@@ -163,11 +163,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Save cart and discount to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('kerelys-cart', JSON.stringify(state.items));
+    localStorage.setItem('klys-cart', JSON.stringify(state.items));
     if (state.appliedDiscount) {
-      localStorage.setItem('kerelys-discount', JSON.stringify(state.appliedDiscount));
+      localStorage.setItem('klys-discount', JSON.stringify(state.appliedDiscount));
     } else {
-      localStorage.removeItem('kerelys-discount');
+      localStorage.removeItem('klys-discount');
     }
   }, [state.items, state.appliedDiscount]);
 

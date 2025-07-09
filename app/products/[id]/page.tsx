@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import NewsletterDialog from "../../components/NewsletterDialog";
 import Cart from "../../components/Cart";
 import CartIcon from "../../components/CartIcon";
+import Logo from "../../components/Logo";
 import { useCart } from "../../contexts/CartContext";
 import FastPaymentButtons from "../../components/FastPaymentButtons";
 import Link from "next/link";
@@ -48,7 +49,7 @@ const packages: PackageType[] = [
       "30-Day Money Back"
     ],
     details: {
-      description: "Start your hair regrowth journey with our 1-month supply. Perfect for those who want to try Kerelys Minoxidil and experience the first signs of improvement. This package includes everything you need to begin your transformation.",
+              description: "Start your hair regrowth journey with our 1-month supply. Perfect for those who want to try Klys Minoxidil and experience the first signs of improvement. This package includes everything you need to begin your transformation.",
       benefits: [
         "Ideal for first-time users",
         "Risk-free trial period",
@@ -227,24 +228,14 @@ export default function ProductPage({ params }: { params: Params }) {
           <div className="flex items-center justify-between">
             {/* Logo and Brand */}
             <div className="flex items-center gap-6">
-              <Link href="/" className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-[#8B4513] tracking-tight">Kerelys</span>
-                <div className="hidden sm:flex items-center gap-2">
-                  <span className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded font-medium flex items-center gap-1">
-                    <FaLeaf className="text-green-600" /> Authentic
-                  </span>
-                  <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded font-medium flex items-center gap-1">
-                    <FaFlask className="text-blue-600" /> FDA Approved
-                  </span>
-                </div>
-              </Link>
+              <Logo variant="header" showBadges={false} />
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
               <Link href="/products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Products</Link>
               <Link href="/#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Shop</Link>
-              <Link href="/#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Why Kerelys?</Link>
+              <Link href="/#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Why Klys?</Link>
               <Link href="/#testimonials" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Reviews</Link>
               <Link href="/#faq" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">FAQ</Link>
               <Link href="/#contact" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium">Contact</Link>
@@ -284,7 +275,7 @@ export default function ProductPage({ params }: { params: Params }) {
               <div className="flex flex-col space-y-4">
                 <Link href="/products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Products</Link>
                 <Link href="/#products" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Shop</Link>
-                <Link href="/#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Why Kerelys?</Link>
+                <Link href="/#why" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Why Klys?</Link>
                 <Link href="/#testimonials" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Reviews</Link>
                 <Link href="/#faq" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>FAQ</Link>
                 <Link href="/#contact" className="text-gray-700 hover:text-[#8B4513] transition-colors font-medium py-2" onClick={() => setMobileNavOpen(false)}>Contact</Link>
@@ -318,7 +309,7 @@ export default function ProductPage({ params }: { params: Params }) {
                 <div className="relative bg-white rounded-3xl shadow-2xl p-8">
                   <Image
                     src="/product.png"
-                    alt={`${product.name} - Kerelys Minoxidil`}
+                    alt={`${product.name} - Klys Minoxidil`}
                     width={400}
                     height={500}
                     className="object-contain w-full h-auto"

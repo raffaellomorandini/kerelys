@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react";
-import { FaLeaf, FaFlask } from "react-icons/fa";
 import Link from "next/link";
 import CartIcon from "./CartIcon";
+import Logo from "./Logo";
 
 export default function Header() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -14,27 +14,14 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo and Brand */}
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">K</span>
-              </div>
-              <span className="text-2xl font-bold text-slate-800 tracking-tight">Kerelys</span>
-              <div className="hidden sm:flex items-center gap-2">
-                <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full font-medium flex items-center gap-1 border border-emerald-200">
-                  <FaLeaf className="text-emerald-600" /> Authentic
-                </span>
-                <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium flex items-center gap-1 border border-blue-200">
-                  <FaFlask className="text-blue-600" /> FDA Approved
-                </span>
-              </div>
-            </div>
+            <Logo variant="header" showBadges={true} />
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             <Link href="/products" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Products</Link>
             <a href="/#products" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Shop</a>
-            <a href="/#why" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Why Kerelys?</a>
+            <a href="/#why" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Why Klys?</a>
             <a href="/#testimonials" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Reviews</a>
             <a href="/#faq" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">FAQ</a>
             <a href="/#contact" className="text-slate-600 hover:text-blue-800 transition-colors font-medium">Contact</a>
@@ -74,7 +61,7 @@ export default function Header() {
             <div className="flex flex-col space-y-4">
               <Link href="/products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Products</Link>
               <a href="#products" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Shop</a>
-              <a href="#why" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Why Kerelys?</a>
+              <a href="#why" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Why Klys?</a>
               <a href="#testimonials" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Reviews</a>
               <a href="#faq" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>FAQ</a>
               <a href="#contact" className="text-slate-700 hover:text-blue-800 transition-colors font-medium py-2 border-b border-slate-100" onClick={() => setMobileNavOpen(false)}>Contact</a>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope } from "react-icons/fa";
 import { addEmail } from "../actions";
 import { toast } from "sonner";
+import Logo from "./Logo";
 
 export default function Footer() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,11 +39,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">K</span>
-              </div>
-              <div className="text-2xl font-bold text-white">Kerelys</div>
+            <div className="mb-4">
+              <Logo variant="footer" showBadges={false} />
             </div>
             <p className="text-slate-400 mb-6 max-w-md">
               Premium Minoxidil Solutions for real hair regrowth results. Trusted by thousands of customers worldwide.
@@ -57,7 +55,7 @@ export default function Footer() {
               <a href="#" aria-label="Twitter" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
                 <FaTwitter className="text-white" />
               </a>
-              <a href="mailto:info@kerelys.com" aria-label="Email" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+              <a href="mailto:support@klys.store" aria-label="Email" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
                 <FaEnvelope className="text-white" />
               </a>
             </div>
@@ -67,7 +65,7 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Quick Links</h3>
             <nav className="space-y-2">
               <a href="#products" className="block text-slate-400 hover:text-white transition-colors">Products</a>
-              <a href="#why" className="block text-slate-400 hover:text-white transition-colors">Why Kerelys?</a>
+              <a href="#why" className="block text-slate-400 hover:text-white transition-colors">Why Klys?</a>
               <a href="#faq" className="block text-slate-400 hover:text-white transition-colors">FAQ</a>
               <a href="#testimonials" className="block text-slate-400 hover:text-white transition-colors">Reviews</a>
             </nav>
@@ -127,7 +125,7 @@ export default function Footer() {
         
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-sm text-slate-400">
-            &copy; {new Date().getFullYear()} Kerelys. All rights reserved.
+            &copy; {new Date().getFullYear()} Klys. All rights reserved.
           </div>
           <div className="flex gap-6 text-sm">
             <a href="#" className="text-slate-400 hover:text-white transition-colors">Privacy Policy</a>

@@ -66,8 +66,8 @@ export default function PaymentSuccessPage() {
         <div className="mt-6 pt-6 border-t border-slate-200">
           <p className="text-xs text-slate-500">
             Need help? Contact us at{' '}
-            <a href="mailto:support@kerelys.com" className="text-blue-800 hover:underline">
-              support@kerelys.com
+            <a href="mailto:support@klys.com" className="text-blue-800 hover:underline">
+              support@klys.com
             </a>
           </p>
         </div>

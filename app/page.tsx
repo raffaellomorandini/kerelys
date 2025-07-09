@@ -185,10 +185,10 @@ export default function Home() {
             </div>
             <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
               Regrow Your Confidence with
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Kerelys Minoxidil</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Klys Minoxidil</span>
             </h1>
             <p className="text-slate-600 text-xl leading-relaxed mb-8">
-              Experience real, visible hair regrowth with our advanced, dermatologist-recommended formula. Trusted by thousands, Kerelys Minoxidil is your path to fuller, thicker hair and renewed self-assurance.
+              Experience real, visible hair regrowth with our advanced, dermatologist-recommended formula. Trusted by thousands, Klys Minoxidil is your path to fuller, thicker hair and renewed self-assurance.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
               <button 
@@ -258,7 +258,7 @@ export default function Home() {
                     <div className="relative z-10">
                       <Image
                         src="/product.png"
-                        alt="Kerelys Minoxidil Solution"
+                        alt="Klys Minoxidil Solution"
                         width={400}
                         height={500}
                         className="object-contain w-full h-auto product-glow drop-shadow-2xl"
@@ -310,7 +310,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product Specifications & Why Kerelys */}
+      {/* Product Specifications & Why Klys */}
       <section id="why" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 py-20 overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -328,7 +328,7 @@ export default function Home() {
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Why Choose
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Kerelys?</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Klys?</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Our commitment to quality, science, and customer satisfaction sets us apart in the hair care industry.
@@ -431,7 +431,7 @@ export default function Home() {
           {/* Bottom CTA for Why Choose section */}
           <div className="text-center">
             <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to Experience the Kerelys Difference?</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to Experience the Klys Difference?</h3>
               <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
                 Join thousands of satisfied customers who have already transformed their hair and confidence with our clinically proven formula.
               </p>
@@ -519,7 +519,7 @@ export default function Home() {
                     <div className="relative bg-gradient-to-br from-slate-50 via-white to-slate-100 rounded-2xl p-6 border border-slate-200 shadow-soft group-hover:shadow-elegant transition-all duration-300">
                       <Image
                         src="/product.png"
-                        alt={`${pkg.name} - Kerelys Minoxidil`}
+                        alt={`${pkg.name} - Klys Minoxidil`}
                         width={120}
                         height={150}
                         className="object-contain w-full h-auto product-glow drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
@@ -656,7 +656,7 @@ export default function Home() {
             <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Not Sure Which Package to Choose?</h3>
               <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Start with our 1-month supply to experience the Kerelys difference, or choose our most popular 3-month package for optimal results.
+                Start with our 1-month supply to experience the Klys difference, or choose our most popular 3-month package for optimal results.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button 
@@ -698,7 +698,7 @@ export default function Home() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Say About Us</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Real stories from people who have transformed their hair and confidence with Kerelys. 
+              Real stories from people who have transformed their hair and confidence with Klys. 
               <span className="block mt-2 text-lg font-medium text-emerald-700">Join thousands of satisfied customers!</span>
             </p>
           </div>
@@ -719,7 +719,7 @@ export default function Home() {
                   <span className="text-xs text-emerald-700 ml-2 font-semibold bg-emerald-50 px-2 py-1 rounded-full border border-emerald-200">Verified Buyer</span>
                 </div>
                 <p className="text-lg text-slate-700 mb-6 leading-relaxed">
-                  "Kerelys Minoxidil changed my life! My hair is fuller and I feel so much more confident. The results were visible within just a few months."
+                  "Klys Minoxidil changed my life! My hair is fuller and I feel so much more confident. The results were visible within just a few months."
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -797,7 +797,7 @@ export default function Home() {
             <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to Join Our Success Stories?</h3>
               <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Start your hair transformation journey today and become the next success story. Join thousands of satisfied customers who have already experienced the Kerelys difference.
+                Start your hair transformation journey today and become the next success story. Join thousands of satisfied customers who have already experienced the Klys difference.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button 
@@ -839,7 +839,7 @@ export default function Home() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Questions</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Get answers to the most common questions about Kerelys Minoxidil.
+              Get answers to the most common questions about Klys Minoxidil.
               <span className="block mt-2 text-lg font-medium text-emerald-700">Everything you need to know to get started!</span>
             </p>
           </div>
@@ -861,7 +861,7 @@ export default function Home() {
             
             <details className="group bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft hover:shadow-elegant transition-all duration-300">
               <summary className="font-semibold text-xl text-slate-900 cursor-pointer group-open:text-blue-800 transition-colors flex items-center justify-between">
-                <span>Is Kerelys Minoxidil safe?</span>
+                <span>Is Klys Minoxidil safe?</span>
                 <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-open:bg-blue-200 transition-colors">
                   <svg className="w-4 h-4 text-blue-600 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -906,7 +906,7 @@ export default function Home() {
             <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Still have questions?</h3>
               <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Our expert support team is here to help you with any questions about Kerelys Minoxidil. We're committed to your success and satisfaction.
+                Our expert support team is here to help you with any questions about Klys Minoxidil. We're committed to your success and satisfaction.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="#contact" className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced inline-flex items-center gap-2">

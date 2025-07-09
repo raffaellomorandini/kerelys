@@ -23,7 +23,7 @@ const packages: PackageType[] = [
   {
     id: 1,
     name: "Starter Pack",
-    desc: "Perfect for trying Kerelys",
+    desc: "Perfect for trying Klys",
     price: 29.99,
     per: "per bottle",
     features: [
@@ -133,7 +133,7 @@ export default function ProductsPage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Perfect Package</span>
             </h1>
             <p className="text-slate-600 text-xl leading-relaxed max-w-3xl mx-auto">
-              Select the ideal Kerelys Minoxidil package for your hair regrowth journey. All packages include free shipping and our comprehensive money-back guarantee.
+              Select the ideal Klys Minoxidil package for your hair regrowth journey. All packages include free shipping and our comprehensive money-back guarantee.
             </p>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function ProductsPage() {
       <section className="w-full bg-white py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">Why Choose Kerelys?</h2>
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Why Choose Klys?</h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               Our commitment to quality, science, and customer satisfaction sets us apart in the hair care industry.
             </p>
@@ -314,7 +314,7 @@ export default function ProductsPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4">Trusted by Thousands</h3>
                   <p className="text-slate-600 mb-6">
-                    Join thousands of satisfied customers who have transformed their hair and confidence with Kerelys.
+                    Join thousands of satisfied customers who have transformed their hair and confidence with Klys.
                   </p>
                   <div className="flex items-center justify-center gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
@@ -342,7 +342,7 @@ export default function ProductsPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Hair?</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who have already experienced the Kerelys difference. Start your hair regrowth journey today.
+            Join thousands of satisfied customers who have already experienced the Klys difference. Start your hair regrowth journey today.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

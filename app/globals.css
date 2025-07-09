@@ -11,12 +11,26 @@
   --text-light: 100, 116, 139;
   --bg-light: 248, 250, 252;
   --bg-white: 255, 255, 255;
+  
+  /* Font variables */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-code-bold: 'Code Bold', 'Courier New', monospace;
+}
+
+/* Code Bold Font from Fontfabric */
+@font-face {
+  font-family: 'Code Bold';
+  src: url('/fonts/Code-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-inter);
 }
 
 @layer utilities {
@@ -235,5 +249,41 @@ body {
 
 .btn-enhanced:hover::before {
   left: 100%;
+}
+
+/* Code Bold logo text */
+.logo-code-bold {
+  font-family: var(--font-code-bold);
+  font-weight: bold;
+  letter-spacing: -0.02em;
+}
+
+/* Simple logo styling */
+.logo-simple {
+  transition: all 0.3s ease;
+}
+
+.logo-simple:hover {
+  transform: translateY(-2px);
+}
+
+/* Enhanced logo icon effects */
+.logo-icon-enhanced {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.logo-icon-enhanced:hover {
+  transform: scale(1.05);
+}
+
+/* Logo glow effect */
+.logo-glow {
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+  transition: all 0.3s ease;
+}
+
+.logo-glow:hover {
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.25);
 }
 

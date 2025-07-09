@@ -1,16 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CartProvider } from "./contexts/CartContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({ 
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Kerelys - Premium Minoxidil Solutions",
-  description: "Transform your hair growth journey with Kerelys premium minoxidil solutions. Clinically proven, FDA-approved hair regrowth treatment.",
+      title: "Klys - Premium Minoxidil Solutions",
+    description: "Transform your hair growth journey with Klys premium minoxidil solutions. Clinically proven, FDA-approved hair regrowth treatment.",
 };
 
 export default function RootLayout({
@@ -19,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <body className={`${inter.className} antialiased`}>
         <CartProvider>
           <Toaster />
           <Header />
