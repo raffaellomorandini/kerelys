@@ -39,12 +39,11 @@ export default function CheckoutPage() {
           totalAmount: totalAmount,
           currency: 'USD',
           items: state.items.map(item => ({
-            productName: item.name,
-            productId: item.id.toString(),
-            quantity: item.quantity,
-            unitPrice: item.price,
-            totalPrice: item.price * item.quantity,
-            stripeProductId: item.stripeProductId,
+            name: item.name,
+            id: item.id.toString(),
+            qty: item.quantity,
+            price: item.price,
+            total: item.price * item.quantity,
           })),
           shipping: {
             name: '', // Will be filled from billing address
@@ -55,12 +54,12 @@ export default function CheckoutPage() {
             country: 'US', // Default
             phone: '', // Will be filled from billing address
           },
-          metadata: {
-            cartItems: state.items,
-            appliedDiscount: state.appliedDiscount,
+          // Simplified metadata to stay under 500 characters
+          meta: {
             subtotal: subtotal,
-            discountAmount: discountAmount,
-            taxAmount: taxAmount,
+            discount: discountAmount,
+            tax: taxAmount,
+            hasDiscount: !!state.appliedDiscount,
           },
         };
 

@@ -303,11 +303,39 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
           originalCurrency: paymentIntent.currency,
         },
       };
+    } else {
+      // Transform simplified order data to full structure
+      orderData = {
+        email: orderData.email || 'customer@example.com',
+        totalAmount: orderData.totalAmount,
+        currency: orderData.currency || 'USD',
+        items: orderData.items?.map((item: any) => ({
+          productName: item.name,
+          productId: item.id,
+          quantity: item.qty,
+          unitPrice: item.price,
+          totalPrice: item.total,
+          stripeProductId: item.stripeProductId || 'unknown',
+        })) || [],
+        shipping: orderData.shipping || {
+          name: 'Customer',
+          street: 'Address not provided',
+          city: 'City not provided',
+          zip: '00000',
+          province: 'State not provided',
+          country: 'US',
+          phone: '',
+        },
+        metadata: {
+          ...orderData.meta,
+          paymentIntentId: paymentIntent.id,
+          customerId: paymentIntent.customer,
+          createdFromWebhook: true,
+        },
+        stripePaymentIntentId: paymentIntent.id,
+        stripeCustomerId: paymentIntent.customer as string,
+      };
     }
-
-    // Add payment intent ID to order data
-    orderData.stripePaymentIntentId = paymentIntent.id;
-    orderData.stripeCustomerId = paymentIntent.customer as string;
 
     // Create order in database
     log('Creating order from payment intent...', { paymentIntentId: paymentIntent.id });

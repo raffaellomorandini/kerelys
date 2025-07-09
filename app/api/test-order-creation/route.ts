@@ -34,6 +34,10 @@ export async function POST(request: NextRequest) {
       metadata: {
         test: true,
         timestamp: new Date().toISOString(),
+        subtotal: 99.98,
+        discount: 0,
+        tax: 0,
+        hasDiscount: false,
       },
     };
 
