@@ -41,7 +41,13 @@ export interface OrderData {
 }
 
 // Create a new order in the database
-export async function createOrder(orderData: OrderData) {
+export async function createOrder(orderData: OrderData): Promise<{
+  success: true;
+  order: any;
+} | {
+  success: false;
+  error: string;
+}> {
   try {
     console.log('=== Creating Order ===', {
       email: orderData.email,
@@ -118,7 +124,7 @@ export async function createOrder(orderData: OrderData) {
     console.log('Shipping information created:', { shippingId: shippingInfo.id });
 
     const result = {
-      success: true,
+      success: true as const,
       order: {
         ...order,
         items: orderItems.flat(),
@@ -144,14 +150,20 @@ export async function createOrder(orderData: OrderData) {
       },
     });
     return {
-      success: false,
+      success: false as const,
       error: 'Failed to create order',
     };
   }
 }
 
 // Get order by order number
-export async function getOrderByNumber(orderNumber: string) {
+export async function getOrderByNumber(orderNumber: string): Promise<{
+  success: true;
+  order: any;
+} | {
+  success: false;
+  error: string;
+}> {
   try {
     const order = await db
       .select()
@@ -160,7 +172,7 @@ export async function getOrderByNumber(orderNumber: string) {
       .limit(1);
 
     if (order.length === 0) {
-      return { success: false, error: 'Order not found' };
+      return { success: false as const, error: 'Order not found' };
     }
 
     const orderItems = await db
@@ -175,7 +187,7 @@ export async function getOrderByNumber(orderNumber: string) {
       .limit(1);
 
     return {
-      success: true,
+      success: true as const,
       order: {
         ...order[0],
         items: orderItems,
@@ -185,14 +197,20 @@ export async function getOrderByNumber(orderNumber: string) {
   } catch (error) {
     console.error('Error fetching order:', error);
     return {
-      success: false,
+      success: false as const,
       error: 'Failed to fetch order',
     };
   }
 }
 
 // Get orders by email
-export async function getOrdersByEmail(email: string) {
+export async function getOrdersByEmail(email: string): Promise<{
+  success: true;
+  orders: any[];
+} | {
+  success: false;
+  error: string;
+}> {
   try {
     const orders = await db
       .select()
@@ -201,20 +219,26 @@ export async function getOrdersByEmail(email: string) {
       .orderBy(ordersTable.createdAt);
 
     return {
-      success: true,
+      success: true as const,
       orders,
     };
   } catch (error) {
     console.error('Error fetching orders:', error);
     return {
-      success: false,
+      success: false as const,
       error: 'Failed to fetch orders',
     };
   }
 }
 
 // Update order status
-export async function updateOrderStatus(orderNumber: string, status: string) {
+export async function updateOrderStatus(orderNumber: string, status: string): Promise<{
+  success: true;
+  order: any;
+} | {
+  success: false;
+  error: string;
+}> {
   try {
     const [updatedOrder] = await db
       .update(ordersTable)
@@ -226,13 +250,13 @@ export async function updateOrderStatus(orderNumber: string, status: string) {
       .returning();
 
     return {
-      success: true,
+      success: true as const,
       order: updatedOrder,
     };
   } catch (error) {
     console.error('Error updating order status:', error);
     return {
-      success: false,
+      success: false as const,
       error: 'Failed to update order status',
     };
   }
