@@ -117,7 +117,11 @@ export async function POST(request: NextRequest) {
         break;
       
       default:
-        log(`Unhandled event type: ${event.type}`, { eventId: event.id });
+        log(`Unhandled event type: ${event.type}`, { 
+          eventId: event.id,
+          eventType: event.type,
+          note: 'This event type is not configured to create orders. Only checkout.session.completed creates orders.'
+        });
     }
 
     log('Webhook processed successfully', { eventType: event.type, eventId: event.id });
