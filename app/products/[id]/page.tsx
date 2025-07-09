@@ -14,170 +14,9 @@ import FastPaymentButtons from "../../components/FastPaymentButtons";
 import Link from "next/link";
 import { use } from 'react'
 import { useRouter } from "next/navigation";
+import { packages, PackageType, calculateSavings, calculateTotalPrice } from "../../lib/products";
 
 type Params = Promise<{ id: string }>
-
-interface PackageType {
-  id: number;
-  name: string;
-  desc: string;
-  price: number;
-  per: string;
-  features: string[];
-  popular?: boolean;
-  stripeProductId: string;
-  details?: {
-    description: string;
-    benefits: string[];
-    ingredients: string[];
-    usage: string[];
-    results: string[];
-  };
-}
-
-const packages: PackageType[] = [
-  {
-    id: 1,
-    name: "1 Month Supply",
-    desc: "Perfect for trying",
-    price: 49.97,
-    per: "/bottle",
-    stripeProductId: "prod_SWkMCTU7zYFuy7",
-    features: [
-      "1 x 60ml Bottle",
-      "Free Shipping",
-      "30-Day Money Back"
-    ],
-    details: {
-              description: "Start your hair regrowth journey with our 1-month supply. Perfect for those who want to try Klys Minoxidil and experience the first signs of improvement. This package includes everything you need to begin your transformation.",
-      benefits: [
-        "Ideal for first-time users",
-        "Risk-free trial period",
-        "Complete starter kit included",
-        "30-day money-back guarantee"
-      ],
-      ingredients: [
-        "5% Minoxidil (active ingredient)",
-        "Propylene Glycol",
-        "Ethanol",
-        "Purified Water",
-        "Natural extracts"
-      ],
-      usage: [
-        "Apply twice daily to affected areas",
-        "Use 1ml per application",
-        "Massage gently into scalp",
-        "Allow to dry completely",
-        "Continue for at least 4 months for best results"
-      ],
-      results: [
-        "First results typically visible in 8-12 weeks",
-        "Gradual hair thickening",
-        "Reduced hair shedding",
-        "Improved scalp health"
-      ]
-    }
-  },
-  {
-    id: 3,
-    name: "3 Month Supply",
-    desc: "Recommended treatment",
-    price: 39.97,
-    per: "/bottle",
-    stripeProductId: "prod_SWkMCTU7zYFuy7",
-    features: [
-      "3 x 60ml Bottles",
-      "Free Express Shipping",
-      "60-Day Money Back",
-      "Progress Tracking Guide"
-    ],
-    popular: true,
-    details: {
-      description: "Our most popular choice! The 3-month supply provides the optimal treatment period to see significant results. This package includes our comprehensive progress tracking guide and extended money-back guarantee.",
-      benefits: [
-        "Optimal treatment duration",
-        "Significant cost savings",
-        "Progress tracking included",
-        "Extended 60-day guarantee",
-        "Free express shipping"
-      ],
-      ingredients: [
-        "5% Minoxidil (active ingredient)",
-        "Propylene Glycol",
-        "Ethanol",
-        "Purified Water",
-        "Natural extracts",
-        "Vitamin B5 (Panthenol)",
-        "Biotin"
-      ],
-      usage: [
-        "Apply twice daily to affected areas",
-        "Use 1ml per application",
-        "Massage gently into scalp",
-        "Allow to dry completely",
-        "Track progress weekly",
-        "Continue for full 3 months"
-      ],
-      results: [
-        "Visible results in 6-8 weeks",
-        "Significant hair regrowth",
-        "Improved hair density",
-        "Enhanced confidence"
-      ]
-    }
-  },
-  {
-    id: 6,
-    name: "6 Month Supply",
-    desc: "Best value & results",
-    price: 33.97,
-    per: "/bottle",
-    stripeProductId: "prod_SWkMCTU7zYFuy7",
-    features: [
-      "6 x 60ml Bottles",
-      "Free Express Shipping",
-      "90-Day Money Back",
-      "Complete Hair Care Kit",
-      "Personal Consultation"
-    ],
-    details: {
-      description: "The ultimate hair regrowth solution! Our 6-month supply offers the best value and provides the complete treatment cycle needed for maximum results. Includes our complete hair care kit and personal consultation.",
-      benefits: [
-        "Maximum value and savings",
-        "Complete treatment cycle",
-        "Personal consultation included",
-        "Complete hair care kit",
-        "90-day money-back guarantee",
-        "Priority customer support"
-      ],
-      ingredients: [
-        "5% Minoxidil (active ingredient)",
-        "Propylene Glycol",
-        "Ethanol",
-        "Purified Water",
-        "Natural extracts",
-        "Vitamin B5 (Panthenol)",
-        "Biotin",
-        "Niacinamide",
-        "Zinc PCA"
-      ],
-      usage: [
-        "Apply twice daily to affected areas",
-        "Use 1ml per application",
-        "Massage gently into scalp",
-        "Allow to dry completely",
-        "Follow complete hair care routine",
-        "Schedule consultation for personalized advice"
-      ],
-      results: [
-        "Maximum hair regrowth potential",
-        "Long-term hair health improvement",
-        "Sustained results",
-        "Complete transformation"
-      ]
-    }
-  }
-];
 
 export default function ProductPage({ params }: { params: Params }) {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
@@ -372,7 +211,7 @@ export default function ProductPage({ params }: { params: Params }) {
                     toast.success(`${product.name} added to cart!`);
                   }}
                 >
-                  Add to Cart - ${product.price}
+                  Add to Cart - ${calculateTotalPrice(product.id).toFixed(2)}
                 </button>
                 
                 {/* Fast Payment Buttons */}
@@ -631,7 +470,7 @@ export default function ProductPage({ params }: { params: Params }) {
                     toast.success(`${product.name} added to cart!`);
                   }}
                 >
-                  Add to Cart
+                  Add to Cart - ${calculateTotalPrice(product.id).toFixed(2)}
                 </button>
                 <FastPaymentButtons variant="compact" />
               </div>

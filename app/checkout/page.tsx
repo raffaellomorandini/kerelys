@@ -9,6 +9,7 @@ import CheckoutForm from '../components/CheckoutForm';
 import DiscountCode from '../components/DiscountCode';
 import { toast } from 'sonner';
 import { FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
+import { calculateTotalPrice } from '../lib/products';
 
 // Load Stripe outside of component to avoid recreating on every render
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -43,8 +44,8 @@ export default function CheckoutPage() {
             name: item.name,
             id: item.id.toString(),
             qty: item.quantity,
-            price: item.price,
-            total: item.price * item.quantity,
+            price: calculateTotalPrice(item.id),
+            total: calculateTotalPrice(item.id) * item.quantity,
           })),
           shipping: {
             name: '', // Will be filled from billing address
@@ -197,7 +198,7 @@ export default function CheckoutPage() {
                       <p className="text-sm text-slate-600">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-slate-900">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatPrice(calculateTotalPrice(item.id) * item.quantity)}
                     </p>
                   </div>
                 ))}

@@ -7,69 +7,7 @@ import { FaCheckCircle, FaLeaf, FaFlask, FaShieldAlt, FaTruck, FaStar, FaGift, F
 import { useCart } from "../contexts/CartContext";
 import { toast } from "sonner";
 import FastPaymentButtons from "../components/FastPaymentButtons";
-
-interface PackageType {
-  id: number;
-  name: string;
-  desc: string;
-  price: number;
-  per: string;
-  features: string[];
-  popular?: boolean;
-  stripeProductId: string;
-}
-
-const packages: PackageType[] = [
-  {
-    id: 1,
-    name: "Starter Pack",
-    desc: "Perfect for trying Klys",
-    price: 29.99,
-    per: "per bottle",
-    features: [
-      "1 Month Supply",
-      "Free Shipping",
-      "Money Back Guarantee",
-      "24/7 Customer Support",
-      "FDA Approved Formula"
-    ],
-    stripeProductId: "price_1OqX8X2eZvKYlo2C9QZQZQZQ"
-  },
-  {
-    id: 2,
-    name: "Popular Pack",
-    desc: "Most popular choice",
-    price: 79.99,
-    per: "per 3 months",
-    features: [
-      "3 Month Supply",
-      "Free Express Shipping",
-      "Money Back Guarantee",
-      "Priority Customer Support",
-      "FDA Approved Formula",
-      "Save $10"
-    ],
-    popular: true,
-    stripeProductId: "price_1OqX8X2eZvKYlo2C9QZQZQZQ"
-  },
-  {
-    id: 3,
-    name: "Value Pack",
-    desc: "Best value for money",
-    price: 139.99,
-    per: "per 6 months",
-    features: [
-      "6 Month Supply",
-      "Free Express Shipping",
-      "Money Back Guarantee",
-      "Priority Customer Support",
-      "FDA Approved Formula",
-      "Save $40",
-      "Bonus Hair Care Guide"
-    ],
-    stripeProductId: "price_1OqX8X2eZvKYlo2C9QZQZQZQ"
-  }
-];
+import { packages, PackageType, calculateSavings, calculateTotalPrice } from "../lib/products";
 
 export default function ProductsPage() {
   const { addItem } = useCart();
@@ -176,16 +114,10 @@ export default function ProductsPage() {
                     <span className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-blue-600">${pkg.price.toFixed(2)}</span>
                     <span className="text-slate-500 text-lg">{pkg.per}</span>
                   </div>
-                  {pkg.popular && (
+                  {pkg.id !== 1 && (
                     <div className="text-sm text-emerald-600 font-semibold mt-2 flex items-center justify-center gap-1">
                       <FaGift className="text-emerald-500" />
-                      Save $10
-                    </div>
-                  )}
-                  {pkg.id === 3 && (
-                    <div className="text-sm text-emerald-600 font-semibold mt-2 flex items-center justify-center gap-1">
-                      <FaGift className="text-emerald-500" />
-                      Save $40
+                      Save ${calculateSavings(pkg.id).toFixed(0)}
                     </div>
                   )}
                 </div>
@@ -227,7 +159,7 @@ export default function ProductsPage() {
                     }}
                     aria-label={`Add ${pkg.name} to cart`}
                   >
-                    Add to Cart - ${pkg.price}
+                    Add to Cart - ${calculateTotalPrice(pkg.id).toFixed(2)}
                   </button>
                   
                   {/* Fast Payment Buttons */}

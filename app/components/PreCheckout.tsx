@@ -6,6 +6,7 @@ import { useCart } from '../contexts/CartContext';
 import PaymentMethods from './PaymentMethods';
 import DiscountCode from './DiscountCode';
 import { FaTimes, FaShieldAlt, FaTruck, FaUndo, FaCreditCard } from 'react-icons/fa';
+import { calculateTotalPrice } from '../lib/products';
 
 interface PreCheckoutProps {
   onClose: () => void;
@@ -76,7 +77,7 @@ export default function PreCheckout({ onClose }: PreCheckoutProps) {
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-gray-900">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatPrice(calculateTotalPrice(item.id) * item.quantity)}
                     </p>
                   </div>
                 ))}

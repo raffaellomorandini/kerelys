@@ -11,17 +11,7 @@ import CartIcon from "./components/CartIcon";
 import { useCart } from "./contexts/CartContext";
 import FastPaymentButtons from "./components/FastPaymentButtons";
 import Link from "next/link";
-
-interface PackageType {
-  id: number;
-  name: string;
-  desc: string;
-  price: number;
-  per: string;
-  features: string[];
-  popular?: boolean;
-  stripeProductId: string;
-}
+import { packages, PackageType, calculateSavings, calculateTotalPrice } from "./lib/products";
 
 export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
@@ -30,57 +20,6 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNewsletterDialog, setShowNewsletterDialog] = useState(false);
   const { addItem } = useCart();
-  const packages: PackageType[] = [
-    {
-      id: 1,
-      name: "1 Month Supply",
-      desc: "Perfect for trying",
-      price: 49.97,
-      per: "/bottle",
-      stripeProductId: "prod_SWkMCTU7zYFuy7",
-      features: [
-        "1 x 60ml Bottle",
-        "Free Shipping",
-        "30-Day Money Back",
-        "FDA Approved Formula",
-        "24/7 Customer Support",
-        "Easy Application Guide"
-      ],
-    },
-    {
-      id: 3,
-      name: "3 Month Supply",
-      desc: "Recommended treatment",
-      price: 39.97,
-      per: "/bottle",
-      stripeProductId: "prod_SWkMCTU7zYFuy7",
-      features: [
-        "3 x 60ml Bottles",
-        "Free Express Shipping",
-        "60-Day Money Back",
-        "Progress Tracking Guide",
-        "Priority Customer Support",
-        "Hair Care Tips"
-      ],
-      popular: true
-    },
-    {
-      id: 6,
-      name: "6 Month Supply",
-      desc: "Best value & results",
-      price: 33.97,
-      per: "/bottle",
-      stripeProductId: "prod_SWkMCTU7zYFuy7",
-      features: [
-        "6 x 60ml Bottles",
-        "Free Express Shipping",
-        "90-Day Money Back",
-        "Complete Hair Care Kit",
-        "Personal Consultation",
-        "Priority Customer Support"
-      ],
-    }
-  ];
 
   // Smooth scroll function
   const scrollToSection = (sectionId: string) => {
@@ -560,30 +499,18 @@ export default function Home() {
                     </div>
                     
                     {/* Savings display */}
-                    {pkg.popular && (
+                    {pkg.id !== 1 && (
                       <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-200">
                         <FaGift className="text-emerald-500" />
-                        Save $30
-                      </div>
-                    )}
-                    {pkg.id === 6 && (
-                      <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-200">
-                        <FaGift className="text-emerald-500" />
-                        Save $96
+                        Save ${calculateSavings(pkg.id).toFixed(0)}
                       </div>
                     )}
                     
                     {/* Original price for comparison */}
-                    {pkg.popular && (
+                    {pkg.id !== 1 && (
                       <div className="text-sm text-slate-500 mt-2">
-                        <span className="line-through">$149.91</span>
-                        <span className="text-emerald-600 font-semibold ml-2">-${30}</span>
-                      </div>
-                    )}
-                    {pkg.id === 6 && (
-                      <div className="text-sm text-slate-500 mt-2">
-                        <span className="line-through">$299.82</span>
-                        <span className="text-emerald-600 font-semibold ml-2">-${96}</span>
+                        <span className="line-through">${(49.97 * (pkg.id === 3 ? 3 : 6)).toFixed(2)}</span>
+                        <span className="text-emerald-600 font-semibold ml-2">-${calculateSavings(pkg.id).toFixed(0)}</span>
                       </div>
                     )}
                   </div>
@@ -626,7 +553,7 @@ export default function Home() {
                     }}
                     aria-label={`Add ${pkg.name} to cart`}
                   >
-                    Add to Cart - ${pkg.price}
+                    Add to Cart - ${calculateTotalPrice(pkg.id).toFixed(2)}
                   </button>
                   
                   {/* Fast Payment Buttons with enhanced styling */}

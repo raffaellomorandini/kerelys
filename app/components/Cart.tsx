@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import PreCheckout from './PreCheckout';
 import FastPaymentButtons from './FastPaymentButtons';
 import DiscountCode from './DiscountCode';
+import { calculateTotalPrice } from '../lib/products';
 
 export default function Cart() {
   const { 
@@ -113,7 +114,7 @@ export default function Cart() {
                     
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-slate-900 truncate">{item.name}</h3>
-                      <p className="text-blue-800 font-semibold">{formatPrice(item.price)}</p>
+                      <p className="text-blue-800 font-semibold">{formatPrice(calculateTotalPrice(item.id))}</p>
                       
                       <div className="flex items-center gap-2 mt-2">
                         <button
@@ -134,7 +135,7 @@ export default function Cart() {
                     
                     <div className="flex flex-col items-end gap-2">
                       <p className="font-semibold text-slate-900">
-                        {formatPrice(item.price * item.quantity)}
+                        {formatPrice(calculateTotalPrice(item.id) * item.quantity)}
                       </p>
                       <button
                         onClick={() => removeItem(item.id)}

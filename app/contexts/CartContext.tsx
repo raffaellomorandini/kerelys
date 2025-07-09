@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { calculateTotalPrice } from '../lib/products';
 
 export interface CartItem {
   id: number;
@@ -204,7 +205,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getTotalPrice = () => {
-    return state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return state.items.reduce((total, item) => total + (calculateTotalPrice(item.id) * item.quantity), 0);
   };
 
   const getDiscountAmount = () => {
