@@ -242,17 +242,93 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
 async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   try {
-    log('Payment succeeded', {
+    log('=== Processing Payment Intent Success ===', {
       paymentIntentId: paymentIntent.id,
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
+      metadata: paymentIntent.metadata,
     });
     
-    // You can also update order status here if needed
-    // await updateOrderStatus(orderNumber, 'paid');
+    // Try to get order data from metadata
+    let orderData = null;
+    if (paymentIntent.metadata.orderData) {
+      try {
+        orderData = JSON.parse(paymentIntent.metadata.orderData);
+        log('Order data parsed from metadata', {
+          email: orderData.email,
+          totalAmount: orderData.totalAmount,
+          itemsCount: orderData.items?.length || 0,
+        });
+      } catch (parseError) {
+        log('ERROR: Failed to parse order data from metadata', {
+          paymentIntentId: paymentIntent.id,
+          parseError: parseError instanceof Error ? parseError.message : 'Unknown error',
+          rawMetadata: paymentIntent.metadata.orderData,
+        });
+      }
+    }
+
+    // If no order data in metadata, create a basic order
+    if (!orderData) {
+      log('No order data in metadata, creating basic order', { paymentIntentId: paymentIntent.id });
+      
+      orderData = {
+        email: 'customer@example.com', // Default email
+        totalAmount: paymentIntent.amount / 100, // Convert from cents
+        currency: paymentIntent.currency?.toUpperCase() || 'USD',
+        items: [
+          {
+            productName: 'Product Purchase',
+            productId: 'unknown',
+            quantity: 1,
+            unitPrice: paymentIntent.amount / 100,
+            totalPrice: paymentIntent.amount / 100,
+            stripeProductId: 'unknown',
+          },
+        ],
+        shipping: {
+          name: 'Customer',
+          street: 'Address not provided',
+          city: 'City not provided',
+          zip: '00000',
+          province: 'State not provided',
+          country: 'US',
+          phone: '',
+        },
+        metadata: {
+          paymentIntentId: paymentIntent.id,
+          customerId: paymentIntent.customer,
+          createdFromWebhook: true,
+          originalAmount: paymentIntent.amount,
+          originalCurrency: paymentIntent.currency,
+        },
+      };
+    }
+
+    // Add payment intent ID to order data
+    orderData.stripePaymentIntentId = paymentIntent.id;
+    orderData.stripeCustomerId = paymentIntent.customer as string;
+
+    // Create order in database
+    log('Creating order from payment intent...', { paymentIntentId: paymentIntent.id });
+    const result = await createOrder(orderData);
+    
+    if (result.success) {
+      log('Order created successfully from payment intent', {
+        orderNumber: result.order.orderNumber,
+        orderId: result.order.id,
+        paymentIntentId: paymentIntent.id,
+      });
+    } else {
+      log('ERROR: Failed to create order from payment intent', {
+        error: result.error,
+        paymentIntentId: paymentIntent.id,
+      });
+    }
   } catch (error) {
     log('ERROR: Error handling payment intent succeeded', {
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      errorStack: error instanceof Error ? error.stack : undefined,
       paymentIntentId: paymentIntent.id,
     });
   }

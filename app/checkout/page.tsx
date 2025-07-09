@@ -33,6 +33,37 @@ export default function CheckoutPage() {
 
     const createPaymentIntent = async () => {
       try {
+        // Prepare order data to be stored in payment intent metadata
+        const orderData = {
+          email: '', // Will be filled from billing address
+          totalAmount: totalAmount,
+          currency: 'USD',
+          items: state.items.map(item => ({
+            productName: item.name,
+            productId: item.id.toString(),
+            quantity: item.quantity,
+            unitPrice: item.price,
+            totalPrice: item.price * item.quantity,
+            stripeProductId: item.stripeProductId,
+          })),
+          shipping: {
+            name: '', // Will be filled from billing address
+            street: '', // Will be filled from billing address
+            city: '', // Will be filled from billing address
+            zip: '', // Will be filled from billing address
+            province: '', // Will be filled from billing address
+            country: 'US', // Default
+            phone: '', // Will be filled from billing address
+          },
+          metadata: {
+            cartItems: state.items,
+            appliedDiscount: state.appliedDiscount,
+            subtotal: subtotal,
+            discountAmount: discountAmount,
+            taxAmount: taxAmount,
+          },
+        };
+
         const response = await fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -42,6 +73,7 @@ export default function CheckoutPage() {
             amount: totalAmount,
             currency: 'usd',
             promotionCode: state.appliedDiscount?.promotionCodeId,
+            orderData: orderData,
           }),
         });
 

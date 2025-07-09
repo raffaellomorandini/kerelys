@@ -32,7 +32,8 @@ export const createPaymentIntent = async (amount: number, currency: string = 'us
 export const createPaymentIntentWithPromotion = async (
   amount: number, 
   currency: string = 'usd',
-  promotionCode?: string
+  promotionCode?: string,
+  orderData?: any
 ) => {
   try {
     const paymentIntentData: any = {
@@ -46,6 +47,13 @@ export const createPaymentIntentWithPromotion = async (
     // If promotion code is provided, add it to the payment intent
     if (promotionCode) {
       paymentIntentData.promotion_code = promotionCode;
+    }
+
+    // If order data is provided, add it to metadata
+    if (orderData) {
+      paymentIntentData.metadata = {
+        orderData: JSON.stringify(orderData),
+      };
     }
 
     const paymentIntent = await stripe.paymentIntents.create(paymentIntentData);
