@@ -43,10 +43,18 @@ export interface OrderData {
 // Create a new order in the database
 export async function createOrder(orderData: OrderData) {
   try {
+    console.log('=== Creating Order ===', {
+      email: orderData.email,
+      totalAmount: orderData.totalAmount,
+      itemsCount: orderData.items.length,
+    });
+
     // Generate unique order number
     const orderNumber = generateOrderNumber();
+    console.log('Generated order number:', orderNumber);
     
     // Create the order
+    console.log('Inserting order into database...');
     const [order] = await db.insert(ordersTable).values({
       orderNumber,
       email: orderData.email,
@@ -58,10 +66,22 @@ export async function createOrder(orderData: OrderData) {
       metadata: orderData.metadata,
     }).returning();
 
+    console.log('Order created in database:', {
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+    });
+
     // Create order items
+    console.log('Creating order items...', { itemsCount: orderData.items.length });
     const orderItems = await Promise.all(
-      orderData.items.map(item =>
-        db.insert(orderItemsTable).values({
+      orderData.items.map(async (item, index) => {
+        console.log(`Creating order item ${index + 1}/${orderData.items.length}:`, {
+          productName: item.productName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+        });
+        
+        const [orderItem] = await db.insert(orderItemsTable).values({
           orderId: order.id,
           productName: item.productName,
           productId: item.productId,
@@ -73,11 +93,17 @@ export async function createOrder(orderData: OrderData) {
           stripeProductId: item.stripeProductId,
           stripePriceId: item.stripePriceId,
           metadata: item.metadata,
-        }).returning()
-      )
+        }).returning();
+        
+        console.log(`Order item ${index + 1} created:`, { itemId: orderItem.id });
+        return orderItem;
+      })
     );
 
+    console.log('All order items created:', { itemsCount: orderItems.length });
+
     // Create shipping information
+    console.log('Creating shipping information...');
     const [shippingInfo] = await db.insert(shippingInfoTable).values({
       orderId: order.id,
       name: orderData.shipping.name,
@@ -89,7 +115,9 @@ export async function createOrder(orderData: OrderData) {
       phone: orderData.shipping.phone,
     }).returning();
 
-    return {
+    console.log('Shipping information created:', { shippingId: shippingInfo.id });
+
+    const result = {
       success: true,
       order: {
         ...order,
@@ -97,8 +125,24 @@ export async function createOrder(orderData: OrderData) {
         shipping: shippingInfo,
       },
     };
+
+    console.log('Order creation completed successfully:', {
+      orderNumber: result.order.orderNumber,
+      orderId: result.order.id,
+      itemsCount: result.order.items.length,
+    });
+
+    return result;
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error('ERROR: Error creating order:', {
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      errorStack: error instanceof Error ? error.stack : undefined,
+      orderData: {
+        email: orderData.email,
+        totalAmount: orderData.totalAmount,
+        itemsCount: orderData.items.length,
+      },
+    });
     return {
       success: false,
       error: 'Failed to create order',

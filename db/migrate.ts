@@ -10,21 +10,21 @@ async function migrate() {
     await db.execute(`
       CREATE TABLE IF NOT EXISTS orders (
         id SERIAL PRIMARY KEY,
-        order_number VARCHAR(50) UNIQUE NOT NULL,
+        "orderNumber" VARCHAR(50) UNIQUE NOT NULL,
         email VARCHAR(255) NOT NULL,
-        stripe_payment_intent_id VARCHAR(255),
-        stripe_customer_id VARCHAR(255),
-        total_amount DECIMAL(10,2) NOT NULL,
+        "stripePaymentIntentId" VARCHAR(255),
+        "stripeCustomerId" VARCHAR(255),
+        "totalAmount" DECIMAL(10,2) NOT NULL,
         currency VARCHAR(3) NOT NULL DEFAULT 'USD',
         status VARCHAR(20) NOT NULL DEFAULT 'pending',
-        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        "createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+        "updatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
         metadata JSONB
       );
       
-      CREATE INDEX IF NOT EXISTS order_number_idx ON orders(order_number);
+      CREATE INDEX IF NOT EXISTS order_number_idx ON orders("orderNumber");
       CREATE INDEX IF NOT EXISTS email_idx ON orders(email);
-      CREATE INDEX IF NOT EXISTS stripe_payment_intent_idx ON orders(stripe_payment_intent_id);
+      CREATE INDEX IF NOT EXISTS stripe_payment_intent_idx ON orders("stripePaymentIntentId");
     `);
 
     // Create order_items table
@@ -32,21 +32,21 @@ async function migrate() {
     await db.execute(`
       CREATE TABLE IF NOT EXISTS order_items (
         id SERIAL PRIMARY KEY,
-        order_id INTEGER NOT NULL REFERENCES orders(id),
-        product_name VARCHAR(255) NOT NULL,
-        product_id VARCHAR(100),
+        "orderId" INTEGER NOT NULL REFERENCES orders(id),
+        "productName" VARCHAR(255) NOT NULL,
+        "productId" VARCHAR(100),
         quantity INTEGER NOT NULL,
-        unit_price DECIMAL(10,2) NOT NULL,
-        total_price DECIMAL(10,2) NOT NULL,
+        "unitPrice" DECIMAL(10,2) NOT NULL,
+        "totalPrice" DECIMAL(10,2) NOT NULL,
         size VARCHAR(50),
         color VARCHAR(50),
-        stripe_product_id VARCHAR(255),
-        stripe_price_id VARCHAR(255),
+        "stripeProductId" VARCHAR(255),
+        "stripePriceId" VARCHAR(255),
         metadata JSONB
       );
       
-      CREATE INDEX IF NOT EXISTS order_id_idx ON order_items(order_id);
-      CREATE INDEX IF NOT EXISTS product_id_idx ON order_items(product_id);
+      CREATE INDEX IF NOT EXISTS order_id_idx ON order_items("orderId");
+      CREATE INDEX IF NOT EXISTS product_id_idx ON order_items("productId");
     `);
 
     // Create shipping_info table
@@ -54,7 +54,7 @@ async function migrate() {
     await db.execute(`
       CREATE TABLE IF NOT EXISTS shipping_info (
         id SERIAL PRIMARY KEY,
-        order_id INTEGER NOT NULL REFERENCES orders(id),
+        "orderId" INTEGER NOT NULL REFERENCES orders(id),
         name VARCHAR(255) NOT NULL,
         street VARCHAR(500) NOT NULL,
         city VARCHAR(100) NOT NULL,
@@ -62,10 +62,10 @@ async function migrate() {
         province VARCHAR(100),
         country VARCHAR(100) NOT NULL,
         phone VARCHAR(20),
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+        "createdAt" TIMESTAMP NOT NULL DEFAULT NOW()
       );
       
-      CREATE INDEX IF NOT EXISTS shipping_order_id_idx ON shipping_info(order_id);
+      CREATE INDEX IF NOT EXISTS shipping_order_id_idx ON shipping_info("orderId");
     `);
 
     console.log('Database migration completed successfully!');
