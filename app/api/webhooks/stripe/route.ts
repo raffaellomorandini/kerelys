@@ -216,13 +216,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     log('Creating order in database...', { sessionId: session.id });
     const result = await createOrder(orderData);
     
-    log('Order creation result', {
-      success: result.success,
-      orderNumber: result.order?.orderNumber,
-      error: result.error,
-    });
-    
-    if (result.success && result.order) {
+    if (result.success) {
       log('Order created successfully', {
         orderNumber: result.order.orderNumber,
         orderId: result.order.id,
