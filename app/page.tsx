@@ -729,156 +729,210 @@ export default function Home() {
             <div className="mb-6">
               <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
                 <FaGift className="text-[#FFD700]" />
-                <span className="text-sm font-medium text-slate-700">Special Offers Available</span>
+                <span className="text-sm font-medium text-slate-700">Premium Hair Care Solution</span>
               </span>
             </div>
             <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
-              Choose Your
-              <span className="block text-[#FFD700]">Perfect Package</span>
+              Klys Minoxidil
+              <span className="block text-[#FFD700]">Treatment</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              All packages include free express shipping and our comprehensive money-back guarantee. 
-              <span className="block mt-2 text-lg font-semibold text-[#FFD700]">Start your hair transformation journey today!</span>
+              Clinically proven 5% minoxidil formula that delivers visible results in weeks, not months.
+              <span className="block mt-2 text-lg font-semibold text-[#FFD700]">Choose your treatment plan below!</span>
             </p>
           </div>
           
-          {/* Tab Navigation */}
-          <div className="flex flex-wrap justify-center gap-2 lg:gap-4 mb-12">
-            {packages.map((pkg, idx) => (
-              <button
-                key={pkg.id}
-                onClick={() => setSelectedPackage(pkg)}
-                className={`relative px-4 lg:px-8 py-3 lg:py-4 rounded-2xl font-semibold text-sm lg:text-lg transition-all duration-300 ${
-                  selectedPackage?.id === pkg.id
-                    ? 'bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 shadow-xl'
-                    : 'bg-white/80 backdrop-blur-sm text-slate-700 hover:bg-white hover:text-[#FFD700] border border-white/20'
-                }`}
-              >
-                {pkg.popular && (
-                  <div className="absolute -top-2 -right-2 bg-[#FFD700] text-slate-900 px-2 py-1 rounded-full text-xs font-bold">
-                    Popular
-                  </div>
-                )}
-                <div className="text-center">
-                  <div className="font-bold">{pkg.name}</div>
-                  <div className="text-xs lg:text-sm opacity-80">${pkg.price}</div>
+          {/* Single Product Card with Package Selection */}
+          <div className="max-w-6xl mx-auto">
+            <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-2xl border border-slate-100 transition-all duration-500">
+              {/* Popular Badge */}
+              {selectedPackage?.popular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                  Most Popular Choice
                 </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Product Preview */}
-          {selectedPackage && (
-            <div className="max-w-4xl mx-auto">
-              <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-slate-100 transition-all duration-500">
-                {/* Popular Badge */}
-                {selectedPackage.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
-                    Most Popular Choice
-                  </div>
-                )}
-                
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  {/* Left Column: Product Image and Info */}
-                  <div className="space-y-6">
-                    {/* Product Image */}
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-2xl blur-xl"></div>
-                      <div className="relative bg-white rounded-2xl p-6 shadow-lg border border-slate-100">
-                        <img
-                          src="/product.png"
-                          alt={selectedPackage.name}
-                          className="w-full h-64 object-contain"
-                        />
-                      </div>
-                    </div>
-                    
-                    {/* Package Info */}
-                    <div className="text-center">
-                      <h3 className="text-3xl font-bold text-slate-900 mb-2">{selectedPackage.name}</h3>
-                      <p className="text-slate-600 mb-4">{selectedPackage.desc}</p>
-                      
-                      {/* Price */}
-                      <div className="bg-gradient-to-r from-[#FFD700]/10 to-[#FFA500]/10 rounded-2xl p-6 border border-[#FFD700]/20">
-                        <div className="text-5xl font-black text-slate-900 mb-2">${selectedPackage.price}</div>
-                        <div className="text-lg text-slate-600 mb-2">{selectedPackage.per}</div>
-                        {selectedPackage.id !== 1 && (
-                          <div className="text-lg font-bold text-[#FFD700]">
-                            Save ${calculateSavings(selectedPackage.id)} compared to monthly
-                          </div>
-                        )}
-                      </div>
+              )}
+              
+              <div className="grid lg:grid-cols-2 gap-12 items-start">
+                {/* Left Column: Product Image and Info */}
+                <div className="space-y-8">
+                  {/* Product Image */}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-2xl blur-xl"></div>
+                    <div className="relative bg-white rounded-2xl p-8 shadow-lg border border-slate-100">
+                      <img
+                        src="/product.png"
+                        alt="Klys Minoxidil"
+                        className="w-full h-80 object-contain"
+                      />
                     </div>
                   </div>
                   
-                  {/* Right Column: Features and Actions */}
-                  <div className="space-y-8">
-                    {/* Features List */}
-                    <div>
-                      <h4 className="text-xl font-bold text-slate-900 mb-4">What's Included:</h4>
-                      <div className="space-y-3">
-                        {selectedPackage.features.map((feature, featureIdx) => (
-                          <div key={featureIdx} className="flex items-start gap-3">
-                            <div className="w-6 h-6 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                              <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                  {/* Product Description */}
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-bold text-slate-900">Klys 5% Minoxidil Solution</h3>
+                    <p className="text-slate-600 leading-relaxed">
+                      Our clinically proven formula contains 5% minoxidil, the gold standard for hair regrowth treatment. 
+                      Each bottle contains 60ml of solution, providing up to 30 days of treatment when used as directed.
+                    </p>
+                    
+                    {/* Key Benefits */}
+                    <div className="grid grid-cols-2 gap-4 pt-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center">
+                          <FaCheckCircle className="text-slate-900 text-sm" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700">FDA Approved</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center">
+                          <FaCheckCircle className="text-slate-900 text-sm" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700">Clinically Proven</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center">
+                          <FaCheckCircle className="text-slate-900 text-sm" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700">Easy Application</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center">
+                          <FaCheckCircle className="text-slate-900 text-sm" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700">Fast Results</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Right Column: Package Selection and Actions */}
+                <div className="space-y-8">
+                  {/* Package Selection */}
+                  <div>
+                    <h4 className="text-xl font-bold text-slate-900 mb-6">Choose Your Treatment Plan:</h4>
+                    
+                    <div className="space-y-4">
+                      {packages.map((pkg) => (
+                        <label
+                          key={pkg.id}
+                          className={`relative flex items-center p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${
+                            selectedPackage?.id === pkg.id
+                              ? 'border-[#FFD700] bg-gradient-to-r from-[#FFD700]/10 to-[#FFA500]/10 shadow-lg'
+                              : 'border-slate-200 bg-white/60 hover:border-slate-300 hover:bg-white/80'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="package"
+                            value={pkg.id}
+                            checked={selectedPackage?.id === pkg.id}
+                            onChange={() => setSelectedPackage(pkg)}
+                            className="sr-only"
+                          />
+                          
+                          {/* Radio Button */}
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 flex-shrink-0 ${
+                            selectedPackage?.id === pkg.id
+                              ? 'border-[#FFD700] bg-[#FFD700]'
+                              : 'border-slate-300'
+                          }`}>
+                            {selectedPackage?.id === pkg.id && (
+                              <div className="w-2 h-2 bg-slate-900 rounded-full"></div>
+                            )}
+                          </div>
+                          
+                          {/* Package Info */}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-lg font-bold text-slate-900">{pkg.name}</h5>
+                              {pkg.popular && (
+                                <span className="bg-[#FFD700] text-slate-900 px-3 py-1 rounded-full text-xs font-bold">
+                                  Popular
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-slate-600 text-sm mb-3">{pkg.desc}</p>
+                            
+                            {/* Price and Savings */}
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-2xl font-bold text-slate-900">${pkg.price}</div>
+                                <div className="text-sm text-slate-500">{pkg.per}</div>
+                              </div>
+                              {pkg.id !== 1 && (
+                                <div className="text-right">
+                                  <div className="text-sm font-bold text-[#FFD700]">
+                                    Save ${calculateSavings(pkg.id)}
+                                  </div>
+                                  <div className="text-xs text-slate-500">vs monthly</div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Selected Package Details */}
+                  {selectedPackage && (
+                    <div className="bg-gradient-to-r from-[#FFD700]/10 to-[#FFA500]/10 rounded-2xl p-6 border border-[#FFD700]/20">
+                      <h5 className="text-lg font-bold text-slate-900 mb-4">Package Includes:</h5>
+                      <div className="space-y-2">
+                        {selectedPackage.features.slice(0, 4).map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-3">
+                            <div className="w-5 h-5 bg-[#FFD700] rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
                             </div>
-                            <span className="text-slate-700 text-lg">{feature}</span>
+                            <span className="text-slate-700 text-sm">{feature}</span>
                           </div>
                         ))}
                       </div>
                     </div>
-                    
-                    {/* Additional Benefits */}
-                    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                      <h4 className="text-lg font-bold text-slate-900 mb-3">Package Benefits:</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex items-center gap-2">
-                          <FaShippingFast className="text-[#FFD700]" />
-                          <span className="text-sm text-slate-700">Free Express Shipping</span>
+                  )}
+                  
+                  {/* Total Price and CTA */}
+                  {selectedPackage && (
+                    <div className="space-y-6">
+                      <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-lg font-semibold text-slate-700">Total Price:</span>
+                          <span className="text-3xl font-bold text-slate-900">${calculateTotalPrice(selectedPackage.id).toFixed(2)}</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <FaShieldAlt className="text-[#FFD700]" />
-                          <span className="text-sm text-slate-700">30-Day Guarantee</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <FaLeaf className="text-[#FFD700]" />
-                          <span className="text-sm text-slate-700">FDA Approved</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <FaCheckCircle className="text-[#FFD700]" />
-                          <span className="text-sm text-slate-700">Clinically Proven</span>
+                        <div className="text-sm text-slate-500">
+                          Includes free shipping and money-back guarantee
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* CTA Buttons */}
-                    <div className="space-y-4">
-                      <button
-                        onClick={() => {
-                          addItem(selectedPackage);
-                        }}
-                        className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
-                      >
-                        Add to Cart - ${calculateTotalPrice(selectedPackage.id).toFixed(2)}
-                      </button>
                       
-                      <Link
-                        href={`/${selectedPackage.id}`}
-                        className="w-full py-3 px-6 border-2 border-[#FFD700] text-[#FFD700] rounded-2xl font-semibold text-lg hover:bg-[#FFD700] hover:text-slate-800 transition-all duration-300 flex items-center justify-center gap-2"
-                      >
-                        <span>View Full Details</span>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
+                      {/* CTA Buttons */}
+                      <div className="space-y-4">
+                        <button
+                          onClick={() => {
+                            addItem(selectedPackage);
+                          }}
+                          className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                        >
+                          Add to Cart - ${calculateTotalPrice(selectedPackage.id).toFixed(2)}
+                        </button>
+                        
+                        <Link
+                          href={`/${selectedPackage.id}`}
+                          className="w-full py-3 px-6 border-2 border-[#FFD700] text-[#FFD700] rounded-2xl font-semibold text-lg hover:bg-[#FFD700] hover:text-slate-800 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                          <span>View Full Details</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
 
