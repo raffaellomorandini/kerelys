@@ -121,8 +121,8 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFD700] mx-auto mb-4"></div>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-12  border border-white/20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
             <p className="text-slate-600 font-medium">Preparing your checkout...</p>
           </div>
         </div>
@@ -133,20 +133,20 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 ">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/')}
-                className="flex items-center gap-3 text-slate-600 hover:text-[#FFD700] transition-colors font-medium"
+                className="flex items-center gap-3 text-slate-600 hover:text-emerald-600 transition-colors font-medium"
               >
                 <FaArrowLeft className="text-sm" />
                 <span className="text-sm font-medium">Continue Shopping</span>
               </button>
             </div>
             <div className="flex items-center gap-3">
-              <FaShoppingBag className="text-[#FFD700] text-2xl" />
+              <FaShoppingBag className="text-emerald-600 text-2xl" />
               <span className="text-2xl font-bold text-slate-800">Checkout</span>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl  border border-white/20 p-8">
               <h2 className="text-2xl font-bold text-slate-800 mb-6">Payment Information</h2>
               {clientSecret && (
                 <Elements
@@ -168,7 +168,7 @@ export default function CheckoutPage() {
                     appearance: {
                       theme: 'stripe',
                       variables: {
-                        colorPrimary: '#FFD700',
+                        colorPrimary: '#10b981',
                         colorBackground: '#ffffff',
                         colorText: '#1f2937',
                         colorDanger: '#ef4444',
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 sticky top-8">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl  border border-white/20 p-8 sticky top-8">
               <h2 className="text-2xl font-bold text-slate-800 mb-6">Order Summary</h2>
               
               <div className="space-y-4 mb-8">
@@ -225,13 +225,13 @@ export default function CheckoutPage() {
                 {state.appliedDiscount && (
                   <div className="flex justify-between text-base">
                     <span className="text-slate-600">Discount ({state.appliedDiscount.code})</span>
-                    <span className="text-[#FFD700] font-bold">-{formatPrice(discountAmount)}</span>
+                    <span className="text-emerald-600 font-bold">-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 
                 <div className="flex justify-between text-base">
                   <span className="text-slate-600">Shipping</span>
-                  <span className="text-[#FFD700] font-bold">Free</span>
+                  <span className="text-emerald-600 font-bold">Free</span>
                 </div>
                 
                 <div className="flex justify-between text-base">
@@ -241,7 +241,7 @@ export default function CheckoutPage() {
                 
                 <div className="flex justify-between text-xl font-bold border-t border-slate-200 pt-4">
                   <span className="text-slate-800">Total</span>
-                  <span className="text-[#FFD700]">
+                  <span className="text-emerald-600">
                     {formatPrice(totalAmount)}
                   </span>
                 </div>
@@ -249,10 +249,10 @@ export default function CheckoutPage() {
 
               {/* Applied Promotion */}
               {state.appliedDiscount && (
-                <div className="mb-8 p-6 bg-[#FFD700]/10 rounded-2xl border border-[#FFD700]/20">
+                <div className="mb-8 p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-semibold text-slate-800">Applied Promotion:</span>
-                    <span className="text-lg font-bold text-[#FFD700]">
+                    <span className="text-lg font-bold text-emerald-600">
                       {state.appliedDiscount.code}
                     </span>
                   </div>
@@ -266,11 +266,11 @@ export default function CheckoutPage() {
               <div className="pt-6 border-t border-slate-200">
                 <div className="flex items-center justify-center gap-6 text-sm text-slate-600">
                   <div className="flex items-center gap-2">
-                    <FaShieldAlt className="text-[#FFD700]" />
+                    <FaShieldAlt className="text-emerald-600" />
                     <span className="font-medium">Secure Checkout</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FaLock className="text-[#FFD700]" />
+                    <FaLock className="text-emerald-600" />
                     <span className="font-medium">SSL Encrypted</span>
                   </div>
                 </div>

@@ -60,18 +60,16 @@ export default function Cart() {
       />
       
       {/* Cart Sidebar */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out">
+      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white  z-50 transform transition-transform duration-300 ease-in-out">
         <div className="flex flex-col h-full bg-white">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-white">
-            <div className="flex items-center gap-3">
-              <FaShoppingCart className="text-[#FFD700] text-xl" />
+            <div className="flex items-center gap-3 mb-4">
+              <FaShoppingCart className="text-emerald-600 text-xl" />
               <h2 className="text-xl font-bold text-slate-900">Shopping Cart</h2>
-              {getTotalItems() > 0 && (
-                <span className="bg-[#FFD700] text-slate-900 text-xs rounded-full px-2 py-1 font-semibold">
-                  {getTotalItems()}
-                </span>
-              )}
+              <span className="bg-emerald-600 text-white text-xs rounded-full px-2 py-1 font-semibold">
+                {getTotalItems()} {getTotalItems() === 1 ? 'item' : 'items'}
+              </span>
             </div>
             <button
               onClick={closeCart}
@@ -107,7 +105,7 @@ export default function Cart() {
                     
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-slate-900 truncate">{item.name}</h3>
-                      <p className="text-[#FFD700] font-semibold">{formatPrice(calculateTotalPrice(item.id))}</p>
+                      <p className="text-emerald-600 font-semibold">{formatPrice(calculateTotalPrice(item.id))}</p>
                       
                       <div className="flex items-center gap-2 mt-2">
                         <button
@@ -150,7 +148,7 @@ export default function Cart() {
               <div className="space-y-2 mb-6">
                 <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                   <span className="text-lg font-semibold text-slate-900">Total</span>
-                  <span className="text-2xl font-bold text-[#FFD700]">
+                  <span className="text-2xl font-bold text-emerald-600">
                     {formatPrice(total)}
                   </span>
                 </div>
