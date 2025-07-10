@@ -918,7 +918,7 @@ export default function Home() {
                         </button>
                         
                         <Link
-                          href={`/${selectedPackage.id}`}
+                          href={`/1?package=${selectedPackage.id}`}
                           className="w-full py-3 px-6 border-2 border-[#FFD700] text-[#FFD700] rounded-2xl font-semibold text-lg hover:bg-[#FFD700] hover:text-slate-800 transition-all duration-300 flex items-center justify-center gap-2"
                         >
                           <span>View Full Details</span>
