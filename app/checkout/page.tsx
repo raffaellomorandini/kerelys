@@ -8,7 +8,7 @@ import { useCart } from '../contexts/CartContext';
 import CheckoutForm from '../components/CheckoutForm';
 import DiscountCode from '../components/DiscountCode';
 import { toast } from 'sonner';
-import { FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
+import { FaArrowLeft, FaShoppingBag, FaShieldAlt, FaLock } from 'react-icons/fa';
 import { calculateTotalPrice } from '../lib/products';
 
 // Load Stripe outside of component to avoid recreating on every render
@@ -119,85 +119,90 @@ export default function CheckoutPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-800 mx-auto mb-4"></div>
-          <p className="text-slate-600">Preparing your checkout...</p>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFD700] mx-auto mb-4"></div>
+            <p className="text-slate-600 font-medium">Preparing your checkout...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/')}
-                className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors"
+                className="flex items-center gap-3 text-slate-600 hover:text-[#FFD700] transition-colors font-medium"
               >
                 <FaArrowLeft className="text-sm" />
                 <span className="text-sm font-medium">Continue Shopping</span>
               </button>
             </div>
-            <div className="flex items-center gap-2">
-              <FaShoppingBag className="text-blue-800 text-xl" />
-              <span className="text-xl font-bold text-slate-900">Checkout</span>
+            <div className="flex items-center gap-3">
+              <FaShoppingBag className="text-[#FFD700] text-2xl" />
+              <span className="text-2xl font-bold text-slate-800">Checkout</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
-            {clientSecret && (
-              <Elements
-                stripe={stripePromise}
-                options={{
-                  clientSecret,
-                  appearance: {
-                    theme: 'stripe',
-                    variables: {
-                      colorPrimary: '#1e3a8a',
-                      colorBackground: '#ffffff',
-                      colorText: '#1f2937',
-                      colorDanger: '#ef4444',
-                      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
-                      spacingUnit: '4px',
-                      borderRadius: '8px',
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Payment Information</h2>
+              {clientSecret && (
+                <Elements
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: 'stripe',
+                      variables: {
+                        colorPrimary: '#FFD700',
+                        colorBackground: '#ffffff',
+                        colorText: '#1f2937',
+                        colorDanger: '#ef4444',
+                        fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+                        spacingUnit: '4px',
+                        borderRadius: '12px',
+                      },
                     },
-                  },
-                }}
-              >
-                <CheckoutForm
-                  amount={totalAmount}
-                  onSuccess={handlePaymentSuccess}
-                  onCancel={handlePaymentCancel}
-                  paymentIntentId={paymentIntentId}
-                />
-              </Elements>
-            )}
+                  }}
+                >
+                  <CheckoutForm
+                    amount={totalAmount}
+                    onSuccess={handlePaymentSuccess}
+                    onCancel={handlePaymentCancel}
+                    paymentIntentId={paymentIntentId}
+                  />
+                </Elements>
+              )}
+            </div>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-elegant p-6 sticky top-8">
-              <h2 className="text-xl font-bold text-slate-900 mb-4">Order Summary</h2>
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 sticky top-8">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Order Summary</h2>
               
-              <div className="space-y-3 mb-6">
+              <div className="space-y-4 mb-8">
                 {state.items.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center">
+                  <div key={item.id} className="flex justify-between items-center p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/20">
                     <div className="flex-1">
-                      <p className="font-medium text-slate-900">{item.name}</p>
+                      <p className="font-semibold text-slate-800">{item.name}</p>
                       <p className="text-sm text-slate-600">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold text-slate-900">
+                    <p className="font-bold text-slate-800">
                       {formatPrice(calculateTotalPrice(item.id) * item.quantity)}
                     </p>
                   </div>
@@ -205,38 +210,38 @@ export default function CheckoutPage() {
               </div>
 
               {/* Discount Code */}
-              <div className="mb-6">
+              <div className="mb-8">
                 <DiscountCode />
               </div>
 
               {/* Price Breakdown */}
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-sm">
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-base">
                   <span className="text-slate-600">Subtotal</span>
-                  <span className="text-slate-900">{formatPrice(subtotal)}</span>
+                  <span className="text-slate-800 font-semibold">{formatPrice(subtotal)}</span>
                 </div>
                 
                 {/* Discount */}
                 {state.appliedDiscount && (
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-base">
                     <span className="text-slate-600">Discount ({state.appliedDiscount.code})</span>
-                    <span className="text-emerald-600 font-medium">-{formatPrice(discountAmount)}</span>
+                    <span className="text-[#FFD700] font-bold">-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-base">
                   <span className="text-slate-600">Shipping</span>
-                  <span className="text-emerald-600 font-medium">Free</span>
+                  <span className="text-[#FFD700] font-bold">Free</span>
                 </div>
                 
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-base">
                   <span className="text-slate-600">Tax</span>
-                  <span className="text-slate-900">{formatPrice(taxAmount)}</span>
+                  <span className="text-slate-800 font-semibold">{formatPrice(taxAmount)}</span>
                 </div>
                 
-                <div className="flex justify-between text-lg font-bold border-t border-slate-200 pt-2">
-                  <span className="text-slate-900">Total</span>
-                  <span className="text-blue-800">
+                <div className="flex justify-between text-xl font-bold border-t border-slate-200 pt-4">
+                  <span className="text-slate-800">Total</span>
+                  <span className="text-[#FFD700]">
                     {formatPrice(totalAmount)}
                   </span>
                 </div>
@@ -244,33 +249,29 @@ export default function CheckoutPage() {
 
               {/* Applied Promotion */}
               {state.appliedDiscount && (
-                <div className="mt-4 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-emerald-800">Applied Promotion:</span>
-                    <span className="text-lg font-bold text-emerald-800">
+                <div className="mb-8 p-6 bg-[#FFD700]/10 rounded-2xl border border-[#FFD700]/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-slate-800">Applied Promotion:</span>
+                    <span className="text-lg font-bold text-[#FFD700]">
                       {state.appliedDiscount.code}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-600 mt-1">
+                  <p className="text-sm text-slate-600">
                     {state.appliedDiscount.name} - You saved {formatPrice(discountAmount)}
                   </p>
                 </div>
               )}
 
               {/* Security Badges */}
-              <div className="mt-6 pt-6 border-t border-slate-200">
-                <div className="flex items-center justify-center gap-4 text-sm text-slate-500">
-                  <div className="flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Secure Checkout</span>
+              <div className="pt-6 border-t border-slate-200">
+                <div className="flex items-center justify-center gap-6 text-sm text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <FaShieldAlt className="text-[#FFD700]" />
+                    <span className="font-medium">Secure Checkout</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span>SSL Encrypted</span>
+                  <div className="flex items-center gap-2">
+                    <FaLock className="text-[#FFD700]" />
+                    <span className="font-medium">SSL Encrypted</span>
                   </div>
                 </div>
               </div>

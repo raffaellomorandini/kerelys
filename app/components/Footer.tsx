@@ -36,7 +36,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="w-full bg-slate-900 text-white py-16">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-2">
             <div className="mb-4">
@@ -46,16 +46,16 @@ export default function Footer() {
               Premium Minoxidil Solutions for real hair regrowth results. Trusted by thousands of customers worldwide.
             </p>
             <div className="flex gap-4">
-              <a href="#" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+              <a href="#" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center hover:bg-slate-700 transition-colors">
                 <FaFacebook className="text-white" />
               </a>
-              <a href="#" aria-label="Instagram" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+              <a href="#" aria-label="Instagram" className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center hover:bg-slate-700 transition-colors">
                 <FaInstagram className="text-white" />
               </a>
-              <a href="#" aria-label="Twitter" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+              <a href="#" aria-label="Twitter" className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center hover:bg-slate-700 transition-colors">
                 <FaTwitter className="text-white" />
               </a>
-              <a href="mailto:support@klys.store" aria-label="Email" className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+              <a href="mailto:support@klys.store" aria-label="Email" className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center hover:bg-slate-700 transition-colors">
                 <FaEnvelope className="text-white" />
               </a>
             </div>
@@ -95,7 +95,7 @@ export default function Footer() {
                 <input 
                   type="email" 
                   placeholder="Your email address" 
-                  className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" 
+                  className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" 
                   required 
                   name="email"
                   disabled={isSubmitting}
@@ -103,7 +103,7 @@ export default function Footer() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-800 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="bg-blue-800 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isSubmitting ? (
                     <>

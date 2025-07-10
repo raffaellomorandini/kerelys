@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link";
-import { FaLeaf, FaFlask } from "react-icons/fa";
 
 interface LogoProps {
   variant?: "header" | "footer";
@@ -9,16 +8,19 @@ interface LogoProps {
   className?: string;
 }
 
-export default function Logo({ variant = "header", showBadges = true, className = "" }: LogoProps) {
+export default function Logo({ variant = "header", showBadges = false, className = "" }: LogoProps) {
   const isHeader = variant === "header";
   
   return (
-    <Link href="/" className={`flex items-center gap-5 group logo-simple ${className}`}>
-      {/* Brand Name with bigger text */}
+    <Link href="/" className={`flex items-center gap-3 group logo-simple ${className}`}>
+      {/* Brand Name */}
       <div className="flex flex-col">
-        <span className={`font-bold text-slate-900 logo-code-bold leading-tight ${
-          isHeader ? 'text-4xl' : 'text-2xl text-white'
-        }`}>
+        <span 
+          className={`font-bold text-slate-900 leading-tight ${
+            isHeader ? 'text-3xl' : 'text-2xl text-white'
+          }`}
+          style={{ fontFamily: 'var(--font-code-bold)' }}
+        >
           Klys
         </span>
         {isHeader && (
@@ -27,18 +29,6 @@ export default function Logo({ variant = "header", showBadges = true, className 
           </span>
         )}
       </div>
-      
-      {/* Enhanced Trust Badges */}
-      {showBadges && isHeader && (
-        <div className="hidden sm:flex items-center gap-3">
-          <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-lg font-semibold flex items-center gap-1.5 border border-emerald-200 shadow-sm">
-            <FaLeaf className="text-emerald-600 text-xs" /> Authentic
-          </span>
-          <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs rounded-lg font-semibold flex items-center gap-1.5 border border-blue-200 shadow-sm">
-            <FaFlask className="text-blue-600 text-xs" /> FDA Approved
-          </span>
-        </div>
-      )}
     </Link>
   );
 } 

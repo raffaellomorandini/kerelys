@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots, FaGift, FaAward, FaHeart, FaUsers } from "react-icons/fa";
+import { FaCheckCircle, FaShippingFast, FaLock, FaStar, FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaLeaf, FaFlask, FaBoxOpen, FaTruck, FaShieldAlt, FaCcVisa, FaCcMastercard, FaCcPaypal, FaRegCommentDots, FaGift, FaAward, FaHeart, FaUsers, FaDownload, FaPlay, FaClock, FaUser, FaTimes } from "react-icons/fa";
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 import { addEmail } from "./actions";
 import { toast } from "sonner";
 import NewsletterDialog from "./components/NewsletterDialog";
@@ -14,7 +15,7 @@ import Link from "next/link";
 import { packages, PackageType, calculateSavings, calculateTotalPrice } from "./lib/products";
 
 export default function Home() {
-  const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(packages[1]); // Default to the popular package
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,152 +98,314 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-start w-full font-sans">
-      {/* Hero Section */}
-      <section className="relative w-full gradient-hero-enhanced py-20 overflow-hidden">
-        {/* Enhanced Background decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-100/40 to-blue-200/40 rounded-full opacity-60 blur-3xl animate-pulse-glow"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-amber-100/40 to-yellow-200/40 rounded-full opacity-60 blur-3xl animate-pulse-glow" style={{animationDelay: '2s'}}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-blue-50/30 to-amber-50/30 rounded-full blur-3xl"></div>
-          
-          {/* Particle effects */}
-          <div className="particle" style={{left: '10%', top: '20%', animationDelay: '0s'}}></div>
-          <div className="particle" style={{left: '20%', top: '60%', animationDelay: '1s'}}></div>
-          <div className="particle" style={{left: '80%', top: '30%', animationDelay: '2s'}}></div>
-          <div className="particle" style={{left: '90%', top: '70%', animationDelay: '0.5s'}}></div>
-          <div className="particle" style={{left: '50%', top: '10%', animationDelay: '1.5s'}}></div>
-        </div>
+      {/* Modern Hero Section */}
+      <section className="relative w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,215,0,0.1),transparent_50%)]" />
+        <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-tr from-[#FFD700]/15 to-transparent rounded-full blur-3xl" />
         
-        <div className="relative max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row items-center justify-between gap-16">
-          {/* Left Content */}
-          <div className="flex-1 max-w-2xl">
-            <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-soft badge-float">
-                <FaFlask className="text-blue-600" />
-                Clinically Proven Formula
-              </span>
-            </div>
-            <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
-              Regrow Your Confidence with
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Klys Minoxidil</span>
-            </h1>
-            <p className="text-slate-600 text-xl leading-relaxed mb-8">
-              Experience real, visible hair regrowth with our advanced, dermatologist-recommended formula. Trusted by thousands, Klys Minoxidil is your path to fuller, thicker hair and renewed self-assurance.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-              <button 
-                className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced"
-                onClick={() => scrollToSection('products')}
-              >
-                Shop Now
-              </button>
-              <button 
-                className="btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform duration-200 btn-enhanced"
-                onClick={() => scrollToSection('why')}
-              >
-                Learn More
-              </button>
-              <button 
-                className="btn-gold text-lg px-6 py-4 flex items-center gap-2 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced"
-                onClick={() => setShowNewsletterDialog(true)}
-              >
-                <FaGift className="w-5 h-5" />
-                Get Discount
-              </button>
-            </div>
-            <div className="flex flex-wrap items-center gap-6">
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <FaShieldAlt className="text-emerald-500" />
-                <span className="font-medium">100% Money Back Guarantee</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Content */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <div className="w-2 h-2 bg-[#FFD700] rounded-full"></div>
+                <span className="text-sm font-medium text-slate-700">Premium Hair Care Solution</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <FaShippingFast className="text-blue-500" />
-                <span className="font-medium">Free Express Shipping</span>
+              
+              {/* Main Heading */}
+              <div className="space-y-4">
+                <h1 
+                  className="text-5xl lg:text-7xl font-black text-slate-900 leading-[0.9] tracking-tight"
+                  style={{ fontFamily: 'var(--font-code-bold)' }}
+                >
+                  Transform Your
+                  <span className="block text-[#FFD700]">Hair Journey</span>
+                </h1>
+                <p className="text-xl lg:text-2xl text-slate-600 max-w-lg leading-relaxed">
+                  Clinically proven minoxidil formula that delivers visible results in weeks, not months.
+                </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <FaLeaf className="text-emerald-500" />
-                <span className="font-medium">FDA Approved</span>
+              
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-6 py-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">95%</div>
+                  <div className="text-sm text-slate-500">Success Rate</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">4-8</div>
+                  <div className="text-sm text-slate-500">Weeks to Results</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">50K+</div>
+                  <div className="text-sm text-slate-500">Happy Customers</div>
+                </div>
+              </div>
+              
+              {/* CTA Section */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  className="group relative px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                  onClick={() => scrollToSection('products')}
+                >
+                  <span className="relative z-10">Shop Now - $49.97</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
+                <button className="px-8 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl font-semibold text-lg hover:border-[#FFD700] hover:text-[#FFD700] transition-all duration-300">
+                  Learn More
+                </button>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center gap-6 pt-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-[#FFD700] rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-sm text-slate-600">FDA Approved</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-[#FFD700] rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-sm text-slate-600">Free Shipping</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-[#FFD700] rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span className="text-sm text-slate-600">30-Day Guarantee</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right Column - Product Display */}
+            <div className="relative">
+              {/* Main Product Card */}
+              <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
+                {/* Floating Badge */}
+                <div className="absolute -top-4 -right-4 bg-[#FFD700] text-slate-900 px-4 py-2 rounded-full font-bold text-sm shadow-lg">
+                  #1 Best Seller
+                </div>
+                
+                {/* Product Image */}
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-2xl"></div>
+                  <img
+                    src="/product.png"
+                    alt="Klys Minoxidil"
+                    className="relative w-full h-96 object-contain rounded-2xl"
+                  />
+                </div>
+                
+                {/* Product Info */}
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-slate-900">Klys Minoxidil 5%</h3>
+                  <p className="text-slate-600">Advanced hair regrowth solution with clinically proven results</p>
+                  
+                  {/* Features Grid */}
+                  <div className="grid grid-cols-2 gap-4 pt-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                        <FaLeaf className="w-4 h-4 text-[#FFD700]" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">100% Organic</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                        <FaFlask className="w-4 h-4 text-[#FFD700]" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">Food Grade</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                        <FaBoxOpen className="w-4 h-4 text-[#FFD700]" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">60ml Volume</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                        <FaTruck className="w-4 h-4 text-[#FFD700]" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">Free Delivery</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Floating Price Card */}
+              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-6 border border-slate-100">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-slate-900">$49.97</div>
+                  <div className="text-sm text-slate-500">One-time purchase</div>
+                  <div className="text-xs text-[#FFD700] font-semibold mt-1">Save ${calculateSavings(1)}</div>
+                </div>
               </div>
             </div>
           </div>
-          
-          {/* Enhanced Right Content - Product Image */}
-          <div className="flex-1 flex justify-center lg:justify-end">
-            <div className="relative group">
-              {/* Multiple layered backgrounds for depth */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-100/30 to-amber-100/30 rounded-3xl blur-3xl group-hover:blur-2xl transition-all duration-500"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-3xl blur-2xl group-hover:blur-xl transition-all duration-500"></div>
-              
-              {/* Main product container with enhanced styling */}
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-elegant p-8 border border-white/50 group-hover:shadow-2xl transition-all duration-500 group-hover:scale-105 hover-lift">
-                {/* Product image with enhanced presentation */}
-                <div className="relative">
-                  {/* Floating elements around the product */}
-                  <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '0.5s'}}>
-                    <FaCheckCircle className="text-white text-sm" />
-                  </div>
-                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                    <FaFlask className="text-white text-sm" />
-                  </div>
-                  <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1.5s'}}>
-                    <FaStar className="text-white text-sm" />
-                  </div>
-                  <div className="absolute -bottom-4 -right-4 w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '2s'}}>
-                    <FaHeart className="text-white text-sm" />
-                  </div>
-                  
-                  {/* Main product image with enhanced styling */}
-                  <div className="relative ">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-amber-50/30 rounded-2xl"></div>
-                    <div className="relative z-10">
-                      <Image
-                        src="/product.png"
-                        alt="Klys Minoxidil Solution"
-                        width={400}
-                        height={500}
-                        className="object-contain w-full h-auto product-glow drop-shadow-2xl"
-                        priority
-                      />
+        </div>
+      </section>
+
+      {/* Tutorial Section */}
+      <section id="tutorial" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full opacity-40 blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-tr from-[#FFD700]/8 to-transparent rounded-full opacity-40 blur-3xl" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaPlay className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Step-by-Step Tutorial</span>
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
+              How to Use
+              <span className="block text-[#FFD700]">Klys Minoxidil</span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Follow our simple step-by-step guide to achieve optimal results with Klys Minoxidil.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+            {/* Left Column: Step-by-Step Instructions */}
+            <div className="space-y-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6">Application Steps</h3>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-slate-900 font-bold text-sm">1</span>
                     </div>
-                    {/* Subtle reflection effect */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-slate-200/20 to-transparent rounded-b-2xl"></div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Clean Your Scalp</h4>
+                      <p className="text-slate-600">Wash your hair with a mild shampoo and towel dry until slightly damp.</p>
+                    </div>
                   </div>
-                  
-                  {/* Product label overlay */}
-                  <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-800 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg badge-float">
-                    NEW
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-slate-900 font-bold text-sm">2</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Apply the Solution</h4>
+                      <p className="text-slate-600">Use the dropper to apply 1ml (20 drops) to the affected areas of your scalp.</p>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Bottom info strip */}
-                <div className="mt-6 pt-4 border-t border-slate-200">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Premium Quality</span>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="text-amber-400 text-xs" />
-                      ))}
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-slate-900 font-bold text-sm">3</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Massage Gently</h4>
+                      <p className="text-slate-600">Gently massage the solution into your scalp with your fingertips.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-slate-900 font-bold text-sm">4</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Let It Dry</h4>
+                      <p className="text-slate-600">Allow the solution to dry completely before styling your hair.</p>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              {/* Floating testimonial card */}
-              <div className="absolute -bottom-8 -left-8 bg-white rounded-xl shadow-elegant p-4 border border-slate-200 max-w-xs animate-float glass">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">J</span>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaClock className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">Twice Daily</div>
+                  <div className="text-sm text-slate-600">Morning & Evening</div>
+                </div>
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaUser className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">1ml Per Use</div>
+                  <div className="text-sm text-slate-600">20 Drops</div>
+                </div>
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaCheckCircle className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">4+ Months</div>
+                  <div className="text-sm text-slate-600">For Best Results</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Before/After Slider */}
+            <div className="relative">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">See the Results</h3>
+                <div className="relative h-96 rounded-2xl overflow-hidden shadow-lg">
+                  <ReactCompareSlider
+                    itemOne={
+                      <ReactCompareSliderImage
+                        src="/rand1.png"
+                        alt="Before Treatment"
+                        className="w-full h-full object-cover"
+                      />
+                    }
+                    itemTwo={
+                      <ReactCompareSliderImage
+                        src="/rand2.png"
+                        alt="After Treatment"
+                        className="w-full h-full object-cover"
+                      />
+                    }
+                    handle={
+                      <div className="w-12 h-12 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                        <svg className="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                        </svg>
+                      </div>
+                    }
+                    className="w-full h-full"
+                  />
+                  <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Before
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-900">John D.</p>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="text-amber-400 text-xs" />
-                      ))}
-                    </div>
+                  <div className="absolute top-4 right-4 bg-[#FFD700] text-slate-900 px-3 py-1 rounded-full text-sm font-semibold">
+                    After
                   </div>
                 </div>
-                <p className="text-xs text-slate-600 italic">"Amazing results in just 3 months!"</p>
+                <p className="text-center text-slate-600 mt-4 text-sm">
+                  Drag the slider to see the transformation
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* PDF Download Button */}
+          <div className="text-center">
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-slate-100">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                Download Complete Guide
+              </div>
+              <div className="pt-4">
+                <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-6">Get Your Complete Tutorial Guide</h3>
+                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Download our comprehensive PDF guide with detailed instructions, tips, and best practices for optimal results.
+                </p>
+                <a
+                  href="/tutorial.pdf"
+                  download="Klys_Minoxidil_Tutorial.pdf"
+                  className="group relative px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 inline-flex items-center gap-3"
+                >
+                  <FaDownload className="w-5 h-5" />
+                  <span>Download PDF Guide</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
               </div>
             </div>
           </div>
@@ -250,143 +413,304 @@ export default function Home() {
       </section>
 
       {/* Product Specifications & Why Klys */}
-      <section id="why" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 py-20 overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-100/30 to-blue-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow"></div>
-          <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-br from-emerald-100/30 to-emerald-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow" style={{animationDelay: '2s'}}></div>
-        </div>
+      <section id="why" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-tr from-[#FFD700]/8 to-transparent rounded-full blur-3xl" />
         
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          {/* Header Section */}
+          <div className="text-center mb-20">
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-soft badge-float">
-                <FaAward className="text-blue-600" />
-                Trusted by Thousands
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaAward className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Scientifically Proven Results</span>
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
               Why Choose
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Klys?</span>
+              <span className="block text-[#FFD700]">Klys?</span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Our commitment to quality, science, and customer satisfaction sets us apart in the hair care industry.
-              <span className="block mt-2 text-lg font-medium text-emerald-700">Join thousands of satisfied customers worldwide!</span>
+            <p className="text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+              Our advanced formula works at the cellular level to transform your hair from the inside out.
             </p>
           </div>
-          
-          {/* Main Features Grid */}
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
-              {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float">
-                <FaCheckCircle className="text-white text-xs" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                <FaStar className="text-white text-xs" />
-              </div>
-              
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                  <FaCheckCircle className="text-emerald-600 text-3xl" />
+
+          {/* Modern Feature Layout */}
+          <div className="space-y-16 mb-20">
+            {/* Feature 1: Reactivates Hair Follicles */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <div className="relative">
+                  <div className="absolute -inset-8 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-3xl blur-2xl"></div>
+                  <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-lg">
+                        <FaLeaf className="text-slate-900 text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-slate-900">Reactivates Hair Follicles</h3>
+                        <p className="text-[#FFD700] font-semibold">Deep Cellular Action</p>
+                      </div>
+                    </div>
+                    <p className="text-lg text-slate-600 leading-relaxed mb-8">
+                      Our advanced formula penetrates deep into the scalp to awaken dormant hair follicles and stimulate new growth at the cellular level.
+                    </p>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">85%</div>
+                        <div className="text-sm text-slate-600">Follicle Activation</div>
+                      </div>
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">2x</div>
+                        <div className="text-sm text-slate-600">Faster Results</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors">Clinically Proven Results</h3>
-                <p className="text-slate-600 leading-relaxed">Our formula has been extensively tested and proven to deliver real, measurable hair regrowth results in clinical studies.</p>
+              </div>
+              <div className="order-1 lg:order-2">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Deep Scalp Penetration</h4>
+                      <p className="text-slate-600">Reaches the root cause of hair loss</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Stimulates Blood Flow</h4>
+                      <p className="text-slate-600">Increases nutrient delivery to follicles</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Awakens Dormant Follicles</h4>
+                      <p className="text-slate-600">Brings sleeping follicles back to life</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
-              {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '0.5s'}}>
-                <FaCheckCircle className="text-white text-xs" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1.5s'}}>
-                <FaStar className="text-white text-xs" />
-              </div>
-              
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                  <FaFlask className="text-blue-600 text-3xl" />
+
+            {/* Feature 2: Stronger & Thicker Hair */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Reinforces Hair Structure</h4>
+                      <p className="text-slate-600">Strengthens from the inside out</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Reduces Breakage</h4>
+                      <p className="text-slate-600">Protects against damage and loss</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Promotes Density</h4>
+                      <p className="text-slate-600">Creates fuller, thicker appearance</p>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-700 transition-colors">Dermatologist Recommended</h3>
-                <p className="text-slate-600 leading-relaxed">Trusted by healthcare professionals worldwide for its safety and effectiveness in treating hair loss.</p>
+              </div>
+              <div>
+                <div className="relative">
+                  <div className="absolute -inset-8 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-3xl blur-2xl"></div>
+                  <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-lg">
+                        <FaShieldAlt className="text-slate-900 text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-slate-900">Stronger & Thicker Hair</h3>
+                        <p className="text-[#FFD700] font-semibold">Structural Reinforcement</p>
+                      </div>
+                    </div>
+                    <p className="text-lg text-slate-600 leading-relaxed mb-8">
+                      Strengthens existing hair strands and promotes thicker, more resilient growth that lasts and resists damage.
+                    </p>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">3x</div>
+                        <div className="text-sm text-slate-600">Hair Strength</div>
+                      </div>
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">40%</div>
+                        <div className="text-sm text-slate-600">Thicker Strands</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
-              {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                <FaCheckCircle className="text-white text-xs" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '2s'}}>
-                <FaStar className="text-white text-xs" />
-              </div>
-              
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                  <FaShieldAlt className="text-amber-600 text-3xl" />
+
+            {/* Feature 3: Hair Regrowth */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <div className="relative">
+                  <div className="absolute -inset-8 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-3xl blur-2xl"></div>
+                  <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-lg">
+                        <FaCheckCircle className="text-slate-900 text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-slate-900">Proven Hair Regrowth</h3>
+                        <p className="text-[#FFD700] font-semibold">Visible Results</p>
+                      </div>
+                    </div>
+                    <p className="text-lg text-slate-600 leading-relaxed mb-8">
+                      Clinically proven to regrow hair in areas where it was lost, restoring your natural hairline and confidence.
+                    </p>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">95%</div>
+                        <div className="text-sm text-slate-600">Success Rate</div>
+                      </div>
+                      <div className="text-center p-4 bg-slate-50 rounded-2xl">
+                        <div className="text-3xl font-bold text-[#FFD700]">4-8</div>
+                        <div className="text-sm text-slate-600">Weeks to Results</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-amber-700 transition-colors">100% Money Back Guarantee</h3>
-                <p className="text-slate-600 leading-relaxed">We're confident in our product. If you're not satisfied within 90 days, we'll refund your purchase—no questions asked.</p>
+              </div>
+              <div className="order-1 lg:order-2">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Visible New Growth</h4>
+                      <p className="text-slate-600">See real results in weeks</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Restores Hairline</h4>
+                      <p className="text-slate-600">Brings back your natural look</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">Long-lasting Results</h4>
+                      <p className="text-slate-600">Maintains your progress</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          
-          {/* Additional Features Grid */}
-          <div className="grid lg:grid-cols-4 gap-6 mb-16">
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center border border-slate-200/50 shadow-soft transition-all duration-300 hover:shadow-elegant hover:scale-105 hover-lift">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                <FaFlask className="text-blue-600 text-2xl" />
+
+          {/* Supporting Features Grid */}
+          <div className="grid lg:grid-cols-4 gap-6 mb-20">
+            <div className="group bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100 p-6 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-12 h-12 bg-[#FFD700] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                <FaFlask className="text-slate-900 text-xl" />
               </div>
-              <h3 className="font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors">5% Minoxidil</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Clinically tested concentration for optimal results</p>
+              <h3 className="font-bold text-slate-900 mb-2">5% Minoxidil</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">Clinically tested concentration for optimal results</p>
             </div>
             
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center border border-slate-200/50 shadow-soft transition-all duration-300 hover:shadow-elegant hover:scale-105 hover-lift">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                <FaTruck className="text-emerald-600 text-2xl" />
+            <div className="group bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100 p-6 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-12 h-12 bg-[#FFD700] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                <FaTruck className="text-slate-900 text-xl" />
               </div>
-              <h3 className="font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors">Free Delivery</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Express shipping worldwide included</p>
+              <h3 className="font-bold text-slate-900 mb-2">Free Delivery</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">Express shipping worldwide included</p>
             </div>
             
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center border border-slate-200/50 shadow-soft transition-all duration-300 hover:shadow-elegant hover:scale-105 hover-lift">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                <FaLeaf className="text-emerald-600 text-2xl" />
+            <div className="group bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100 p-6 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-12 h-12 bg-[#FFD700] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                <FaLeaf className="text-slate-900 text-xl" />
               </div>
-              <h3 className="font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors">FDA Approved</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Safe, effective ingredients you can trust</p>
+              <h3 className="font-bold text-slate-900 mb-2">FDA Approved</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">Safe, effective ingredients you can trust</p>
             </div>
             
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center border border-slate-200/50 shadow-soft transition-all duration-300 hover:shadow-elegant hover:scale-105 hover-lift">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                <FaBoxOpen className="text-amber-600 text-2xl" />
+            <div className="group bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100 p-6 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="w-12 h-12 bg-[#FFD700] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                <FaBoxOpen className="text-slate-900 text-xl" />
               </div>
-              <h3 className="font-bold text-slate-900 mb-2 group-hover:text-amber-700 transition-colors">3 Package Options</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Flexible solutions for your needs</p>
+              <h3 className="font-bold text-slate-900 mb-2">3 Package Options</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">Flexible solutions for your needs</p>
             </div>
           </div>
           
           {/* Bottom CTA for Why Choose section */}
           <div className="text-center">
-            <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to Experience the Klys Difference?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Join thousands of satisfied customers who have already transformed their hair and confidence with our clinically proven formula.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button 
-                  className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => scrollToSection('products')}
-                >
-                  Shop Now
-                </button>
-                <button 
-                  className="btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => setShowNewsletterDialog(true)}
-                >
-                  Get Expert Tips
-                </button>
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-slate-100">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                Ready to Transform?
+              </div>
+              <div className="pt-4">
+                <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-6">Experience the Klys Difference</h3>
+                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Join thousands of satisfied customers who have already transformed their hair and confidence with our clinically proven formula.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <button 
+                    className="group relative px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                    onClick={() => scrollToSection('products')}
+                  >
+                    <span className="relative z-10">Shop Now</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </button>
+                  <button 
+                    className="px-8 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl font-semibold text-lg hover:border-[#FFD700] hover:text-[#FFD700] transition-all duration-300"
+                    onClick={() => setShowNewsletterDialog(true)}
+                  >
+                    Get Expert Tips
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -394,264 +718,217 @@ export default function Home() {
       </section>
 
       {/* Product Packages Section */}
-      <section id="products" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 py-20 overflow-hidden">
+      <section id="products" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
         {/* Background decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-100/30 to-blue-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow"></div>
-          <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-br from-amber-100/30 to-yellow-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow" style={{animationDelay: '2s'}}></div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full opacity-40 blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/8 to-transparent rounded-full opacity-40 blur-3xl"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-soft badge-float">
-                <FaGift className="text-blue-600" />
-                Special Offers Available
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaGift className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Special Offers Available</span>
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
               Choose Your
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Perfect Package</span>
+              <span className="block text-[#FFD700]">Perfect Package</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               All packages include free express shipping and our comprehensive money-back guarantee. 
-              <span className="block mt-2 text-lg font-medium text-emerald-700">Start your hair transformation journey today!</span>
+              <span className="block mt-2 text-lg font-semibold text-[#FFD700]">Start your hair transformation journey today!</span>
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-3 gap-8">
+          {/* Tab Navigation */}
+          <div className="flex flex-wrap justify-center gap-2 lg:gap-4 mb-12">
             {packages.map((pkg, idx) => (
-              <div
+              <button
                 key={pkg.id}
-                className={`relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift flex flex-col min-h-[800px] ${
-                  selectedPackage?.id === pkg.id 
-                    ? 'ring-2 ring-blue-500/30 border-blue-300 shadow-elegant' 
-                    : 'hover:border-blue-300'
-                } ${pkg.popular ? 'ring-2 ring-blue-500/20 border-blue-200' : ''}`}
+                onClick={() => setSelectedPackage(pkg)}
+                className={`relative px-4 lg:px-8 py-3 lg:py-4 rounded-2xl font-semibold text-sm lg:text-lg transition-all duration-300 ${
+                  selectedPackage?.id === pkg.id
+                    ? 'bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 shadow-xl'
+                    : 'bg-white/80 backdrop-blur-sm text-slate-700 hover:bg-white hover:text-[#FFD700] border border-white/20'
+                }`}
               >
-                {/* Popular Badge */}
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-800 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-elegant badge-float">
-                    Most Popular
+                  <div className="absolute -top-2 -right-2 bg-[#FFD700] text-slate-900 px-2 py-1 rounded-full text-xs font-bold">
+                    Popular
+                  </div>
+                )}
+                <div className="text-center">
+                  <div className="font-bold">{pkg.name}</div>
+                  <div className="text-xs lg:text-sm opacity-80">${pkg.price}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Product Preview */}
+          {selectedPackage && (
+            <div className="max-w-4xl mx-auto">
+              <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-slate-100 transition-all duration-500">
+                {/* Popular Badge */}
+                {selectedPackage.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                    Most Popular Choice
                   </div>
                 )}
                 
-                {/* Value Badge */}
-                {pkg.id === 6 && (
-                  <div className="absolute -top-4 right-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-elegant badge-float">
-                    Best Value
-                  </div>
-                )}
-                
-                {/* Floating elements around the card */}
-                <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '0.5s'}}>
-                  <FaCheckCircle className="text-white text-xs" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                  <FaFlask className="text-white text-xs" />
-                </div>
-                
-                {/* Product Image Section */}
-                <div className="text-center mb-6">
-                  <div className="relative inline-block group-hover:scale-110 transition-transform duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 to-amber-100/40 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                    <div className="relative bg-gradient-to-br from-slate-50 via-white to-slate-100 rounded-2xl p-6 border border-slate-200 shadow-soft group-hover:shadow-elegant transition-all duration-300">
-                      <Image
-                        src="/product.png"
-                        alt={`${pkg.name} - Klys Minoxidil`}
-                        width={120}
-                        height={150}
-                        className="object-contain w-full h-auto product-glow drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
-                      />
-                      {/* Product label overlay */}
-                      <div className="absolute top-2 right-2 bg-gradient-to-r from-blue-800 to-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-                        {pkg.id === 1 ? 'STARTER' : pkg.id === 2 ? 'POPULAR' : 'PREMIUM'}
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Left Column: Product Image and Info */}
+                  <div className="space-y-6">
+                    {/* Product Image */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/20 to-transparent rounded-2xl blur-xl"></div>
+                      <div className="relative bg-white rounded-2xl p-6 shadow-lg border border-slate-100">
+                        <img
+                          src="/product.png"
+                          alt={selectedPackage.name}
+                          className="w-full h-64 object-contain"
+                        />
                       </div>
-                      {/* Floating rating stars */}
-                      <div className="absolute bottom-2 left-2 flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <FaStar key={i} className="text-amber-400 text-xs" />
+                    </div>
+                    
+                    {/* Package Info */}
+                    <div className="text-center">
+                      <h3 className="text-3xl font-bold text-slate-900 mb-2">{selectedPackage.name}</h3>
+                      <p className="text-slate-600 mb-4">{selectedPackage.desc}</p>
+                      
+                      {/* Price */}
+                      <div className="bg-gradient-to-r from-[#FFD700]/10 to-[#FFA500]/10 rounded-2xl p-6 border border-[#FFD700]/20">
+                        <div className="text-5xl font-black text-slate-900 mb-2">${selectedPackage.price}</div>
+                        <div className="text-lg text-slate-600 mb-2">{selectedPackage.per}</div>
+                        {selectedPackage.id !== 1 && (
+                          <div className="text-lg font-bold text-[#FFD700]">
+                            Save ${calculateSavings(selectedPackage.id)} compared to monthly
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Right Column: Features and Actions */}
+                  <div className="space-y-8">
+                    {/* Features List */}
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-900 mb-4">What's Included:</h4>
+                      <div className="space-y-3">
+                        {selectedPackage.features.map((feature, featureIdx) => (
+                          <div key={featureIdx} className="flex items-start gap-3">
+                            <div className="w-6 h-6 bg-[#FFD700] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <svg className="w-4 h-4 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <span className="text-slate-700 text-lg">{feature}</span>
+                          </div>
                         ))}
                       </div>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Package Header */}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{pkg.name}</h3>
-                  <p className="text-slate-600">{pkg.desc}</p>
-                </div>
-                
-                {/* Price Section with enhanced styling */}
-                <div className="text-center mb-8">
-                  <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft">
-                    <div className="flex items-baseline justify-center gap-1 mb-2">
-                      <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-blue-600">
-                        ${pkg.id === 1 ? '49.97' : pkg.id === 3 ? '119.91' : '203.82'}
-                      </span>
-                      <span className="text-slate-500 text-lg">total</span>
-                    </div>
                     
-                    {/* Per bottle price */}
-                    <div className="text-sm text-slate-600 mb-3">
-                      {pkg.id === 1 ? '$49.97' : pkg.id === 3 ? '$39.97' : '$33.97'} per bottle
-                    </div>
-                    
-                    {/* Savings display */}
-                    {pkg.id !== 1 && (
-                      <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-200">
-                        <FaGift className="text-emerald-500" />
-                        Save ${calculateSavings(pkg.id).toFixed(0)}
-                      </div>
-                    )}
-                    
-                    {/* Original price for comparison */}
-                    {pkg.id !== 1 && (
-                      <div className="text-sm text-slate-500 mt-2">
-                        <span className="line-through">${(49.97 * (pkg.id === 3 ? 3 : 6)).toFixed(2)}</span>
-                        <span className="text-emerald-600 font-semibold ml-2">-${calculateSavings(pkg.id).toFixed(0)}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Features List with enhanced styling */}
-                <div className="flex-grow">
-                  <ul className="space-y-4 mb-8">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3 group/item">
-                        <div className="flex-shrink-0 w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center mt-0.5 group-hover/item:bg-emerald-200 transition-colors">
-                          <FaCheckCircle className="text-emerald-600 text-xs" />
+                    {/* Additional Benefits */}
+                    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                      <h4 className="text-lg font-bold text-slate-900 mb-3">Package Benefits:</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center gap-2">
+                          <FaShippingFast className="text-[#FFD700]" />
+                          <span className="text-sm text-slate-700">Free Express Shipping</span>
                         </div>
-                        <span className="text-slate-700 group-hover/item:text-slate-900 transition-colors">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Action Buttons with enhanced styling */}
-                <div className="space-y-3">
-                  <Link
-                    href={`/products/${pkg.id}`}
-                    className="w-full py-4 px-4 border-2 border-blue-800 text-blue-800 rounded-xl font-semibold transition-all duration-300 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center group-hover:scale-105"
-                  >
-                    View Details
-                  </Link>
-                  
-                  <button
-                    className="w-full py-4 px-4 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-elegant shadow-lg flex items-center justify-center group-hover:scale-105"
-                    onClick={() => { 
-                      addItem({
-                        id: pkg.id,
-                        name: pkg.name,
-                        price: pkg.price,
-                        stripeProductId: pkg.stripeProductId,
-                        image: "/product.png"
-                      });
-                      toast.success(`${pkg.name} added to cart!`);
-                    }}
-                    aria-label={`Add ${pkg.name} to cart`}
-                  >
-                    Add to Cart - ${calculateTotalPrice(pkg.id).toFixed(2)}
-                  </button>
-                  
-                  {/* Fast Payment Buttons with enhanced styling */}
-                  <div className="border-t border-slate-200 pt-4">
-                    <p className="text-sm text-slate-600 mb-3 text-center font-medium">Or pay instantly with:</p>
-                    <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-xl p-4 border border-slate-200 shadow-soft">
-                      <FastPaymentButtons 
-                        variant="secondary" 
-                        size="sm" 
-                        product={{
-                          id: pkg.id,
-                          name: pkg.name,
-                          price: pkg.price,
-                          stripeProductId: pkg.stripeProductId,
-                          image: "/product.png"
+                        <div className="flex items-center gap-2">
+                          <FaShieldAlt className="text-[#FFD700]" />
+                          <span className="text-sm text-slate-700">30-Day Guarantee</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FaLeaf className="text-[#FFD700]" />
+                          <span className="text-sm text-slate-700">FDA Approved</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FaCheckCircle className="text-[#FFD700]" />
+                          <span className="text-sm text-slate-700">Clinically Proven</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* CTA Buttons */}
+                    <div className="space-y-4">
+                      <button
+                        onClick={() => {
+                          addItem(selectedPackage);
                         }}
-                      />
+                        className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                      >
+                        Add to Cart - ${calculateTotalPrice(selectedPackage.id).toFixed(2)}
+                      </button>
+                      
+                      <Link
+                        href={`/${selectedPackage.id}`}
+                        className="w-full py-3 px-6 border-2 border-[#FFD700] text-[#FFD700] rounded-2xl font-semibold text-lg hover:bg-[#FFD700] hover:text-slate-800 transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        <span>View Full Details</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Bottom CTA */}
-          <div className="text-center mt-16">
-            <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Not Sure Which Package to Choose?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Start with our 1-month supply to experience the Klys difference, or choose our most popular 3-month package for optimal results.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button 
-                  className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => scrollToSection('why')}
-                >
-                  Learn More
-                </button>
-                <button 
-                  className="btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => setShowNewsletterDialog(true)}
-                >
-                  Get Expert Advice
-                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-100 py-20 overflow-hidden">
+      <section id="testimonials" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
         {/* Background decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 right-10 w-64 h-64 bg-gradient-to-br from-blue-100/30 to-blue-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow"></div>
-          <div className="absolute bottom-20 left-10 w-64 h-64 bg-gradient-to-br from-amber-100/30 to-yellow-200/30 rounded-full opacity-40 blur-3xl animate-pulse-glow" style={{animationDelay: '2s'}}></div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-20 right-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full opacity-40 blur-3xl"></div>
+        <div className="absolute bottom-20 left-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/8 to-transparent rounded-full opacity-40 blur-3xl"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-soft badge-float">
-                <FaStar className="text-blue-600" />
-                Customer Success Stories
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaStar className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Customer Success Stories</span>
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
               What Our Customers
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Say About Us</span>
+              <span className="block text-[#FFD700]">Say About Us</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Real stories from people who have transformed their hair and confidence with Klys. 
-              <span className="block mt-2 text-lg font-medium text-emerald-700">Join thousands of satisfied customers!</span>
+              <span className="block mt-2 text-lg font-semibold text-[#FFD700]">Join thousands of satisfied customers!</span>
             </p>
           </div>
           
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
+            <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
               {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float">
-                <FaCheckCircle className="text-white text-xs" />
+              <div className="absolute -top-3 -left-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaCheckCircle className="text-slate-900 text-sm" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                <FaStar className="text-white text-xs" />
+              <div className="absolute -top-3 -right-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaStar className="text-slate-900 text-sm" />
               </div>
               
-              <div className="flex-grow">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-amber-400" />)}
-                  <span className="text-xs text-emerald-700 ml-2 font-semibold bg-emerald-50 px-2 py-1 rounded-full border border-emerald-200">Verified Buyer</span>
+              <div className="flex-grow pt-4">
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-[#FFD700]" />)}
+                  <span className="text-xs text-slate-700 ml-3 font-semibold bg-slate-100 px-3 py-1 rounded-full border border-slate-200">Verified Buyer</span>
                 </div>
-                <p className="text-lg text-slate-700 mb-6 leading-relaxed">
+                <p className="text-lg text-slate-700 mb-8 leading-relaxed">
                   "Klys Minoxidil changed my life! My hair is fuller and I feel so much more confident. The results were visible within just a few months."
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-soft">
-                  <span className="text-blue-800 font-semibold">AR</span>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#FFD700] rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-slate-900 font-bold">AR</span>
                 </div>
                 <div>
                   <div className="font-bold text-slate-900">Alex Rodriguez</div>
@@ -660,27 +937,27 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
+            <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
               {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '0.5s'}}>
-                <FaCheckCircle className="text-white text-xs" />
+              <div className="absolute -top-3 -left-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaCheckCircle className="text-slate-900 text-sm" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1.5s'}}>
-                <FaStar className="text-white text-xs" />
+              <div className="absolute -top-3 -right-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaStar className="text-slate-900 text-sm" />
               </div>
               
-              <div className="flex-grow">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-amber-400" />)}
-                  <span className="text-xs text-emerald-700 ml-2 font-semibold bg-emerald-50 px-2 py-1 rounded-full border border-emerald-200">Verified Buyer</span>
+              <div className="flex-grow pt-4">
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-[#FFD700]" />)}
+                  <span className="text-xs text-slate-700 ml-3 font-semibold bg-slate-100 px-3 py-1 rounded-full border border-slate-200">Verified Buyer</span>
                 </div>
-                <p className="text-lg text-slate-700 mb-6 leading-relaxed">
+                <p className="text-lg text-slate-700 mb-8 leading-relaxed">
                   "I saw real results in just 3 months. The best investment I've made for myself. The customer service is exceptional too."
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center shadow-soft">
-                  <span className="text-emerald-800 font-semibold">JL</span>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#FFD700] rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-slate-900 font-bold">JL</span>
                 </div>
                 <div>
                   <div className="font-bold text-slate-900">Jamie Lee</div>
@@ -689,27 +966,27 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="relative group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-soft border border-slate-200/50 transition-all duration-500 hover:shadow-elegant hover:scale-105 hover-lift">
+            <div className="relative group bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
               {/* Floating elements */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '1s'}}>
-                <FaCheckCircle className="text-white text-xs" />
+              <div className="absolute -top-3 -left-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaCheckCircle className="text-slate-900 text-sm" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg animate-bounce badge-float" style={{animationDelay: '2s'}}>
-                <FaStar className="text-white text-xs" />
+              <div className="absolute -top-3 -right-3 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg">
+                <FaStar className="text-slate-900 text-sm" />
               </div>
               
-              <div className="flex-grow">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-amber-400" />)}
-                  <span className="text-xs text-emerald-700 ml-2 font-semibold bg-emerald-50 px-2 py-1 rounded-full border border-emerald-200">Verified Buyer</span>
+              <div className="flex-grow pt-4">
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(5)].map((_,i) => <FaStar key={i} className="text-[#FFD700]" />)}
+                  <span className="text-xs text-slate-700 ml-3 font-semibold bg-slate-100 px-3 py-1 rounded-full border border-slate-200">Verified Buyer</span>
                 </div>
-                <p className="text-lg text-slate-700 mb-6 leading-relaxed">
+                <p className="text-lg text-slate-700 mb-8 leading-relaxed">
                   "Easy to use, fast shipping, and the customer support is amazing! I've been using it for 6 months and the results are incredible."
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-yellow-200 rounded-full flex items-center justify-center shadow-soft">
-                  <span className="text-amber-800 font-semibold">MS</span>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#FFD700] rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-slate-900 font-bold">MS</span>
                 </div>
                 <div>
                   <div className="font-bold text-slate-900">Morgan Smith</div>
@@ -720,25 +997,31 @@ export default function Home() {
           </div>
           
           {/* Bottom CTA for testimonials */}
-          <div className="text-center mt-16">
-            <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to Join Our Success Stories?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Start your hair transformation journey today and become the next success story. Join thousands of satisfied customers who have already experienced the Klys difference.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button 
-                  className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => scrollToSection('products')}
-                >
-                  Start Your Journey
-                </button>
-                <button 
-                  className="btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => setShowNewsletterDialog(true)}
-                >
-                  Get Expert Tips
-                </button>
+          <div className="text-center mt-20">
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-slate-100">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                Join Our Success Stories
+              </div>
+              <div className="pt-4">
+                <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-6">Ready to Transform Your Hair?</h3>
+                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Start your hair transformation journey today and become the next success story. Join thousands of satisfied customers who have already experienced the Klys difference.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <button 
+                    className="group relative px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                    onClick={() => scrollToSection('products')}
+                  >
+                    <span className="relative z-10">Shop Now</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </button>
+                  <button 
+                    className="px-8 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl font-semibold text-lg hover:border-[#FFD700] hover:text-[#FFD700] transition-all duration-300"
+                    onClick={() => setShowNewsletterDialog(true)}
+                  >
+                    Get Expert Tips
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -746,108 +1029,291 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="relative w-full bg-white py-20 overflow-hidden">
+      <section id="faq" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
         {/* Background decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-100/20 to-blue-200/20 rounded-full opacity-30 blur-3xl animate-pulse-glow"></div>
-          <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-br from-emerald-100/20 to-emerald-200/20 rounded-full opacity-30 blur-3xl animate-pulse-glow" style={{animationDelay: '2s'}}></div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-br from-[#FFD700]/8 to-transparent rounded-full opacity-30 blur-3xl"></div>
         
-        <div className="relative max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
+        <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-soft badge-float">
-                <FaRegCommentDots className="text-blue-600" />
-                Got Questions?
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaRegCommentDots className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Got Questions?</span>
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
               Frequently Asked
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 block animate-pulse">Questions</span>
+              <span className="block text-[#FFD700]">Questions</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Get answers to the most common questions about Klys Minoxidil.
-              <span className="block mt-2 text-lg font-medium text-emerald-700">Everything you need to know to get started!</span>
+              <span className="block mt-2 text-lg font-semibold text-[#FFD700]">Everything you need to know to get started!</span>
             </p>
           </div>
           
           <div className="space-y-6">
-            <details className="group bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft hover:shadow-elegant transition-all duration-300" open>
-              <summary className="font-semibold text-xl text-slate-900 cursor-pointer group-open:text-blue-800 transition-colors flex items-center justify-between">
+            <details className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300" open>
+              <summary className="font-bold text-xl text-slate-900 cursor-pointer group-open:text-[#FFD700] transition-colors flex items-center justify-between">
                 <span>How soon will I see results?</span>
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-open:bg-blue-200 transition-colors">
-                  <svg className="w-4 h-4 text-blue-600 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center group-open:bg-slate-900 transition-colors shadow-md">
+                  <svg className="w-5 h-5 text-slate-900 group-open:text-[#FFD700] transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </summary>
-              <p className="mt-4 text-slate-700 leading-relaxed">
+              <p className="mt-6 text-slate-700 leading-relaxed text-lg">
                 Most users see visible results within 3-6 months of consistent use. Individual results may vary based on factors such as age, genetics, and the extent of hair loss.
               </p>
             </details>
             
-            <details className="group bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft hover:shadow-elegant transition-all duration-300">
-              <summary className="font-semibold text-xl text-slate-900 cursor-pointer group-open:text-blue-800 transition-colors flex items-center justify-between">
+            <details className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <summary className="font-bold text-xl text-slate-900 cursor-pointer group-open:text-[#FFD700] transition-colors flex items-center justify-between">
                 <span>Is Klys Minoxidil safe?</span>
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-open:bg-blue-200 transition-colors">
-                  <svg className="w-4 h-4 text-blue-600 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center group-open:bg-slate-900 transition-colors shadow-md">
+                  <svg className="w-5 h-5 text-slate-900 group-open:text-[#FFD700] transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </summary>
-              <p className="mt-4 text-slate-700 leading-relaxed">
+              <p className="mt-6 text-slate-700 leading-relaxed text-lg">
                 Yes! Our formula is FDA-approved and clinically tested for safety and effectiveness. We use only the highest quality ingredients that meet strict pharmaceutical standards.
               </p>
             </details>
             
-            <details className="group bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft hover:shadow-elegant transition-all duration-300">
-              <summary className="font-semibold text-xl text-slate-900 cursor-pointer group-open:text-blue-800 transition-colors flex items-center justify-between">
+            <details className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <summary className="font-bold text-xl text-slate-900 cursor-pointer group-open:text-[#FFD700] transition-colors flex items-center justify-between">
                 <span>Do you offer a money-back guarantee?</span>
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-open:bg-blue-200 transition-colors">
-                  <svg className="w-4 h-4 text-blue-600 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center group-open:bg-slate-900 transition-colors shadow-md">
+                  <svg className="w-5 h-5 text-slate-900 group-open:text-[#FFD700] transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </summary>
-              <p className="mt-4 text-slate-700 leading-relaxed">
+              <p className="mt-6 text-slate-700 leading-relaxed text-lg">
                 Absolutely. We stand behind our product with a comprehensive money-back guarantee. If you're not satisfied within 90 days, we'll refund your purchase—no questions asked.
               </p>
             </details>
             
-            <details className="group bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-2xl p-6 border border-slate-200 shadow-soft hover:shadow-elegant transition-all duration-300">
-              <summary className="font-semibold text-xl text-slate-900 cursor-pointer group-open:text-blue-800 transition-colors flex items-center justify-between">
+            <details className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <summary className="font-bold text-xl text-slate-900 cursor-pointer group-open:text-[#FFD700] transition-colors flex items-center justify-between">
                 <span>How do I use the product?</span>
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-open:bg-blue-200 transition-colors">
-                  <svg className="w-4 h-4 text-blue-600 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center group-open:bg-slate-900 transition-colors shadow-md">
+                  <svg className="w-5 h-5 text-slate-900 group-open:text-[#FFD700] transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </summary>
-              <p className="mt-4 text-slate-700 leading-relaxed">
+              <p className="mt-6 text-slate-700 leading-relaxed text-lg">
                 Apply the solution to your scalp twice daily as directed. Full instructions are included with your order, and our customer support team is always available to help.
               </p>
             </details>
           </div>
           
-          <div className="text-center mt-16">
-            <div className="bg-gradient-to-r from-blue-50 to-amber-50 rounded-3xl p-8 border border-blue-200/50 shadow-soft">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Still have questions?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                Our expert support team is here to help you with any questions about Klys Minoxidil. We're committed to your success and satisfaction.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#contact" className="btn-primary text-lg px-8 py-4 shadow-elegant hover:scale-105 transition-transform duration-200 btn-enhanced inline-flex items-center gap-2">
-                  Contact Support Team
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
-                <button 
-                  className="btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform duration-200 btn-enhanced"
-                  onClick={() => setShowNewsletterDialog(true)}
-                >
-                  Get Expert Advice
-                </button>
+          <div className="text-center mt-20">
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-slate-100">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FFD700] text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">
+                Need More Help?
+              </div>
+              <div className="pt-4">
+                <h3 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-tight mb-6">Still have questions?</h3>
+                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Our expert support team is here to help you with any questions about Klys Minoxidil. We're committed to your success and satisfaction.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a href="#contact" className="group relative px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 inline-flex items-center gap-2">
+                    <span className="relative z-10">Contact Support Team</span>
+                    <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </a>
+                  <button 
+                    className="px-8 py-4 border-2 border-slate-300 text-slate-700 rounded-2xl font-semibold text-lg hover:border-[#FFD700] hover:text-[#FFD700] transition-all duration-300"
+                    onClick={() => setShowNewsletterDialog(true)}
+                  >
+                    Get Expert Advice
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+      {/* Newsletter Section */}
+      <section id="newsletter" className="relative w-full bg-gradient-to-br from-slate-50 via-white to-slate-50 py-20 lg:py-32 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,215,0,0.08),transparent_50%)]" />
+        <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full opacity-40 blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-tr from-[#FFD700]/8 to-transparent rounded-full opacity-40 blur-3xl" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-2 shadow-sm">
+                <FaEnvelope className="text-[#FFD700]" />
+                <span className="text-sm font-medium text-slate-700">Stay Updated</span>
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[0.9] tracking-tight mb-6">
+              Join Our
+              <span className="block text-[#FFD700]">Newsletter</span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Get exclusive hair care tips, early access to new products, and special offers delivered straight to your inbox.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column: Benefits */}
+            <div className="space-y-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6">What You'll Get</h3>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FaGift className="text-slate-900 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Exclusive Discounts</h4>
+                      <p className="text-slate-600">Be the first to know about special offers and get exclusive discount codes.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FaLeaf className="text-slate-900 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Hair Care Tips</h4>
+                      <p className="text-slate-600">Expert advice and proven techniques for optimal hair health and growth.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FaFlask className="text-slate-900 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Product Updates</h4>
+                      <p className="text-slate-600">Early access to new products and formulations before they're available to everyone.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-[#FFD700] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FaUsers className="text-slate-900 text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2">Success Stories</h4>
+                      <p className="text-slate-600">Real customer testimonials and transformation stories to inspire your journey.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaShieldAlt className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">Privacy First</div>
+                  <div className="text-sm text-slate-600">Your data is safe</div>
+                </div>
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaCheckCircle className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">No Spam</div>
+                  <div className="text-sm text-slate-600">Quality content only</div>
+                </div>
+                <div className="text-center p-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-100">
+                  <FaTimes className="w-8 h-8 text-[#FFD700] mx-auto mb-2" />
+                  <div className="text-lg font-bold text-slate-900">Easy Unsubscribe</div>
+                  <div className="text-sm text-slate-600">One click to leave</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Newsletter Form */}
+            <div className="relative">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-100">
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#FFD700] to-[#FFA500] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <FaEnvelope className="text-slate-900 text-2xl" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Get Your Welcome Gift!</h3>
+                  <p className="text-slate-600">Subscribe now and receive an exclusive discount code for your first purchase.</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Hidden honeypot field */}
+                  <input
+                    type="text"
+                    name="website"
+                    className="absolute left-[-9999px] opacity-0 pointer-events-none"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                  <input
+                    type="hidden"
+                    name="source"
+                    value="newsletter_section"
+                  />
+
+                  <div>
+                    <label htmlFor="newsletter-email" className="block text-sm font-semibold text-slate-700 mb-2">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                      <input
+                        id="newsletter-email"
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        className="w-full pl-12 pr-4 py-4 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFD700] focus:border-[#FFD700] disabled:opacity-50 text-lg"
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-slate-900 py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
+                        Subscribing...
+                      </>
+                    ) : (
+                      <>
+                        <FaGift className="w-5 h-5" />
+                        Subscribe & Get Discount
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                {/* Privacy notice */}
+                <p className="text-sm text-slate-500 text-center mt-6">
+                  We respect your privacy. Unsubscribe at any time. No spam, ever.
+                </p>
+
+                {/* Social proof */}
+                <div className="mt-8 pt-6 border-t border-slate-200">
+                  <div className="flex items-center justify-center gap-6 text-sm text-slate-600">
+                    <div className="flex items-center gap-2">
+                      <FaCheckCircle className="text-[#FFD700]" />
+                      <span className="font-medium">10,000+ subscribers</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaStar className="text-[#FFD700]" />
+                      <span className="font-medium">4.9/5 rating</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

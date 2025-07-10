@@ -1,14 +1,11 @@
 "use client"
 
 import { useState } from 'react';
-import { FaTimes, FaShoppingCart, FaTrash, FaMinus, FaPlus, FaLock, FaCreditCard } from 'react-icons/fa';
+import { FaTimes, FaShoppingCart, FaTrash, FaMinus, FaPlus, FaLock } from 'react-icons/fa';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import PreCheckout from './PreCheckout';
-import FastPaymentButtons from './FastPaymentButtons';
-import DiscountCode from './DiscountCode';
 import { calculateTotalPrice } from '../lib/products';
 
 export default function Cart() {
@@ -19,12 +16,9 @@ export default function Cart() {
     clearCart, 
     closeCart, 
     getTotalItems, 
-    getTotalPrice, 
-    getDiscountedTotal, 
-    getDiscountAmount 
+    getTotalPrice
   } = useCart();
   const router = useRouter();
-  const [showPreCheckout, setShowPreCheckout] = useState(false);
 
   const handleCheckout = () => {
     if (state.items.length === 0) {
@@ -36,13 +30,14 @@ export default function Cart() {
     router.push('/checkout');
   };
 
-  const handleViewPaymentOptions = () => {
+  const handleApplePay = () => {
     if (state.items.length === 0) {
       toast.error('Your cart is empty');
       return;
     }
 
-    setShowPreCheckout(true);
+    closeCart();
+    router.push('/checkout');
   };
 
   const formatPrice = (price: number) => {
@@ -52,9 +47,7 @@ export default function Cart() {
     }).format(price);
   };
 
-  const subtotal = getTotalPrice();
-  const discountAmount = getDiscountAmount();
-  const discountedTotal = getDiscountedTotal();
+  const total = getTotalPrice();
 
   if (!state.isOpen) return null;
 
@@ -72,17 +65,17 @@ export default function Cart() {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-white">
             <div className="flex items-center gap-3">
-              <FaShoppingCart className="text-blue-800 text-xl" />
+              <FaShoppingCart className="text-[#FFD700] text-xl" />
               <h2 className="text-xl font-bold text-slate-900">Shopping Cart</h2>
               {getTotalItems() > 0 && (
-                <span className="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-xs rounded-full px-2 py-1">
+                <span className="bg-[#FFD700] text-slate-900 text-xs rounded-full px-2 py-1 font-semibold">
                   {getTotalItems()}
                 </span>
               )}
             </div>
             <button
               onClick={closeCart}
-              className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
             >
               <FaTimes className="text-xl" />
             </button>
@@ -114,7 +107,7 @@ export default function Cart() {
                     
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-slate-900 truncate">{item.name}</h3>
-                      <p className="text-blue-800 font-semibold">{formatPrice(calculateTotalPrice(item.id))}</p>
+                      <p className="text-[#FFD700] font-semibold">{formatPrice(calculateTotalPrice(item.id))}</p>
                       
                       <div className="flex items-center gap-2 mt-2">
                         <button
@@ -153,60 +146,44 @@ export default function Cart() {
           {/* Footer */}
           {state.items.length > 0 && (
             <div className="border-t border-slate-200 p-6 bg-white">
-              {/* Discount Code */}
-              <div className="mb-4">
-                <DiscountCode />
-              </div>
-
               {/* Price Breakdown */}
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Subtotal</span>
-                  <span className="text-slate-900">{formatPrice(subtotal)}</span>
-                </div>
-                
-                {/* Discount */}
-                {state.appliedDiscount && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">Discount ({state.appliedDiscount.code})</span>
-                    <span className="text-emerald-600 font-medium">-{formatPrice(discountAmount)}</span>
-                  </div>
-                )}
-                
+              <div className="space-y-2 mb-6">
                 <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                   <span className="text-lg font-semibold text-slate-900">Total</span>
-                  <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-blue-600">
-                    {formatPrice(discountedTotal)}
+                  <span className="text-2xl font-bold text-[#FFD700]">
+                    {formatPrice(total)}
                   </span>
-                </div>
-              </div>
-              
-              {/* Fast Payment Buttons */}
-              <div className="mb-4">
-                <p className="text-sm text-slate-600 mb-3 text-center font-medium">Pay instantly with:</p>
-                <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 rounded-xl p-3 border border-slate-200 shadow-soft">
-                  <FastPaymentButtons variant="primary" size="sm" />
                 </div>
               </div>
               
               <div className="space-y-3">
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-gradient-to-r from-blue-800 to-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-elegant transition-all duration-200 flex items-center justify-center gap-2"
+                  className="w-full bg-slate-900 text-white py-3 px-4 rounded-2xl font-semibold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                 >
                   <FaLock className="text-sm" />
-                  View All Payment Options
+                  Checkout
+                </button>
+                
+                <button
+                  onClick={handleApplePay}
+                  className="w-full bg-black text-white py-3 px-4 rounded-2xl font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                  Pay with Apple Pay
                 </button>
                 
                 <button
                   onClick={clearCart}
-                  className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="w-full border border-slate-300 text-slate-700 py-2 px-4 rounded-2xl font-medium hover:bg-slate-50 transition-colors"
                 >
                   Clear Cart
                 </button>
               </div>
               
-              <div className="mt-4 text-xs text-gray-500 text-center">
+              <div className="mt-4 text-xs text-slate-500 text-center">
                 <p>Free shipping on all orders</p>
                 <p>30-day money-back guarantee</p>
               </div>
@@ -214,11 +191,6 @@ export default function Cart() {
           )}
         </div>
       </div>
-
-      {/* PreCheckout Modal */}
-      {showPreCheckout && (
-        <PreCheckout onClose={() => setShowPreCheckout(false)} />
-      )}
     </>
   );
 } 

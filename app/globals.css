@@ -1,24 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-rgb: 17, 24, 39;
-  --primary-navy: 30, 58, 138;
-  --primary-gold: 245, 158, 11;
-  --accent-blue: 59, 130, 246;
-  --accent-green: 34, 197, 94;
-  --text-dark: 15, 23, 42;
-  --text-light: 100, 116, 139;
-  --bg-light: 248, 250, 252;
-  --bg-white: 255, 255, 255;
-  
-  /* Font variables */
+  --foreground-rgb: 30, 32, 34;
+  --background-rgb: 245, 246, 250;
+  --accent-gold: 245, 158, 11; /* Tailwind amber-500 */
+  --accent-gold-hex: #f59e0b;
+  --accent-gold-dark: #b45309;
   --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-playfair: 'Playfair Display', Georgia, serif;
   --font-code-bold: 'Code Bold', 'Courier New', monospace;
 }
 
-/* Code Bold Font from Fontfabric */
 @font-face {
   font-family: 'Code Bold';
   src: url('/fonts/Code-Bold.otf') format('opentype');
@@ -29,261 +21,32 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  background: #f5f6fa;
   font-family: var(--font-inter);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  line-height: 1.6;
   }
   
-  .gradient-primary {
-    background: linear-gradient(135deg, rgb(var(--primary-navy)) 0%, rgb(var(--accent-blue)) 100%);
-  }
-  
-  .gradient-gold {
-    background: linear-gradient(135deg, rgb(var(--primary-gold)) 0%, #fbbf24 100%);
-  }
-  
-  .gradient-hero {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
-  }
-  
-  .shadow-soft {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .shadow-elegant {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-  
-  .border-gradient {
-    border: 2px solid transparent;
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, rgb(var(--primary-navy)), rgb(var(--primary-gold))) border-box;
-  }
-}
-
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f8fafc;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgb(var(--primary-navy));
-  border-radius: 4px;
+  background: #e5e7eb;
+  border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--accent-blue));
+  background: #d1d5db;
 }
-
-/* Smooth animations */
 * {
-  transition: all 0.2s ease-in-out;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s;
 }
 
-/* Professional button styles */
-.btn-primary {
-  @apply bg-gradient-to-r from-blue-800 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-}
-
-.btn-secondary {
-  @apply border-2 border-blue-800 text-blue-800 px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-}
-
-.btn-gold {
-  @apply bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2;
-}
-
-/* Enhanced animations for hero section */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Enhanced hover effects */
-.hover-lift {
-  transition: all 0.3s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* Glass morphism effect */
-.glass {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-/* Enhanced shadows */
-.shadow-glow {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-}
-
-.shadow-glow:hover {
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
-}
-
-/* Particle animation */
-@keyframes particle-float {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-  border-radius: 50%;
-  animation: particle-float 3s linear infinite;
-}
-
-/* Enhanced gradient backgrounds */
-.gradient-hero-enhanced {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%, #f8fafc 100%);
-  background-size: 400% 400%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Product image enhancements */
-.product-glow {
-  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.2));
-  transition: all 0.3s ease;
-}
-
-.product-glow:hover {
-  filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4));
-  transform: scale(1.02);
-}
-
-/* Floating badge animation */
-@keyframes badge-float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-5px) rotate(2deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(0deg);
-  }
-  75% {
-    transform: translateY(-5px) rotate(-2deg);
-  }
-}
-
-.badge-float {
-  animation: badge-float 4s ease-in-out infinite;
-}
-
-/* Enhanced button hover effects */
-.btn-enhanced {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-enhanced::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn-enhanced:hover::before {
-  left: 100%;
-}
-
-/* Code Bold logo text */
-.logo-code-bold {
-  font-family: var(--font-code-bold);
-  font-weight: bold;
-  letter-spacing: -0.02em;
-}
-
-/* Simple logo styling */
 .logo-simple {
-  transition: all 0.3s ease;
+  transition: opacity 0.2s;
 }
-
 .logo-simple:hover {
-  transform: translateY(-2px);
-}
-
-/* Enhanced logo icon effects */
-.logo-icon-enhanced {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.logo-icon-enhanced:hover {
-  transform: scale(1.05);
-}
-
-/* Logo glow effect */
-.logo-glow {
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
-  transition: all 0.3s ease;
-}
-
-.logo-glow:hover {
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.25);
+  opacity: 0.8;
 }
 
