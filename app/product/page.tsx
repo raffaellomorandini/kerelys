@@ -13,8 +13,12 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { packages, PackageType, calculateSavings, calculateTotalPrice } from "../lib/products";
 import ProductImageSlider from "../components/ProductImageSlider";
+import { use } from "react";
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default function ProductPage() {
+export default function ProductPage(props: {
+  searchParams: SearchParams
+}) {
   const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,10 +26,9 @@ export default function ProductPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const { addItem } = useCart();
   const router = useRouter();
-  const searchParams = useSearchParams();
-
+  const searchParams = use(props.searchParams);
   // Get the package from URL query parameter
-  const packageFromUrl = searchParams.get('package');
+  const packageFromUrl = searchParams.package || "";
 
   useEffect(() => {
     if (packageFromUrl) {
